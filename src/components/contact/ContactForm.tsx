@@ -11,6 +11,11 @@ type ContactFormProps = {
   className?: string;
 };
 
+/** Public Cloud Function URL (not a secret). Env var can override. */
+const CONTACT_API_URL =
+  process.env.NEXT_PUBLIC_CONTACT_API_URL?.trim() ||
+  "https://us-west1-contact-form-404005.cloudfunctions.net/contactFormP1P";
+
 export function ContactForm({ className }: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,15 +35,7 @@ export function ContactForm({ className }: ContactFormProps) {
       message: formData.get("message") as string,
     };
 
-    const endpoint = process.env.NEXT_PUBLIC_CONTACT_API_URL?.trim();
-
-    if (!endpoint) {
-      setFormState("error");
-      setErrorMessage(
-        "Contact form is not connected yet. Please email us directly at contact@plus1promo.com.",
-      );
-      return;
-    }
+    const endpoint = CONTACT_API_URL;
 
     try {
       const response = await fetch(endpoint, {
