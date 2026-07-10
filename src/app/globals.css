@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+:root {
+  /* Plus One Promo brand palette — original gold */
+  --brand-gold: #d7a95a;
+  --brand-gold-dark: #b8893a;
+  --brand-gold-light: #f4ecda;
+  --brand-gold-muted: #ebd9b0;
+
+  /* Aliases used by components */
+  --brand-accent: var(--brand-gold);
+  --brand-accent-dark: var(--brand-gold-dark);
+  --brand-accent-light: var(--brand-gold-light);
+  --brand-accent-muted: var(--brand-gold-muted);
+
+  --brand-black: #000000;
+  --brand-cream: #f2e9db;
+  --brand-white: #ffffff;
+
+  /* Semantic tokens */
+  --taupe: var(--brand-black);
+  --grey-olive: #5a5652;
+  --silver: #ddd8cf;
+  --parchment: var(--brand-cream);
+  --powder-blush: var(--brand-gold);
+  --rosy-taupe: var(--brand-gold-dark);
+  --thistle: #e8dcc8;
+  --thistle-light: #f2e9db;
+  --background: var(--brand-white);
+  --foreground: var(--brand-black);
+  --surface: #faf9f7;
+  --border: #ece8e1;
+}
+
+@theme inline {
+  --color-taupe: var(--taupe);
+  --color-grey-olive: var(--grey-olive);
+  --color-silver: var(--silver);
+  --color-parchment: var(--parchment);
+  --color-powder-blush: var(--powder-blush);
+  --color-rosy-taupe: var(--rosy-taupe);
+  --color-thistle: var(--thistle);
+  --color-thistle-light: var(--thistle-light);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-dark: var(--brand-accent-dark);
+  --color-brand-accent-light: var(--brand-accent-light);
+  --color-brand-accent-muted: var(--brand-accent-muted);
+  --color-brand-cream: var(--brand-cream);
+  --font-sans: var(--font-montserrat);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand-gold) 35%, transparent);
+  color: var(--brand-black);
+}
+
+.text-display {
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+
+.text-display-sub {
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.5;
+}
+
+.text-section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.text-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.text-stat {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--silver) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--silver) 35%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-hero-glow {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in srgb, var(--brand-gold) 14%, transparent), transparent),
+    radial-gradient(ellipse 50% 40% at 90% 20%, color-mix(in srgb, var(--brand-cream) 60%, transparent), transparent);
+}
+
+.card-surface {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--brand-black) 4%, transparent);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
