@@ -22,10 +22,11 @@ export function ContactForm({ className }: ContactFormProps) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setFormState("loading");
     setErrorMessage("");
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const data = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
@@ -35,10 +36,8 @@ export function ContactForm({ className }: ContactFormProps) {
       message: formData.get("message") as string,
     };
 
-    const endpoint = CONTACT_API_URL;
-
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(CONTACT_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -52,8 +51,8 @@ export function ContactForm({ className }: ContactFormProps) {
         );
       }
 
+      form.reset();
       setFormState("success");
-      e.currentTarget.reset();
     } catch (error) {
       setFormState("error");
       setErrorMessage(
