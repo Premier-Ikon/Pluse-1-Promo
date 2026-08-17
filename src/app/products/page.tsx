@@ -20,8 +20,31 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="Products"
         title="Premium branded goods & print — all in one place"
-        description={`${siteConfig.name} gives every business access to the best-quality promotional products and print materials — from custom apparel and corporate gifts to business cards, mailers, postcards, EDDM, and yard signs.`}
+        description={`${siteConfig.name} helps you get quality promotional products and print — apparel, gifts, business cards, mailers, EDDM, yard signs, and more.`}
       />
+
+      <section className="border-b border-border bg-surface py-10 md:py-12">
+        <Container>
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-accent-dark">
+                Order requests
+              </p>
+              <h2 className="mt-1 text-lg font-semibold text-taupe md:text-xl">
+                Ready to configure a product?
+              </h2>
+              <p className="mt-1 max-w-xl text-sm text-grey-olive">
+                Browse our shop catalog and submit an order request — no payment
+                online. We confirm pricing before production.
+              </p>
+            </div>
+            <Button href="/shop" variant="secondary" size="md">
+              Open shop
+              <ArrowUpRight size={16} />
+            </Button>
+          </div>
+        </Container>
+      </section>
 
       {productGroups.map((group, groupIndex) => (
         <section

@@ -1,145 +1,131 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { siteConfig, heroFeatures, stats } from "@/data/site";
+import {
+  ArrowRight,
+  Package,
+  MessageCircle,
+  Truck,
+  BadgeCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { IconBox } from "@/lib/icons";
+
+const trustItems = [
+  { icon: BadgeCheck, label: "Clear quotes first" },
+  { icon: MessageCircle, label: "Real people, real help" },
+  { icon: Truck, label: "Ships nationwide" },
+  { icon: Package, label: "Apparel, print & gifts" },
+];
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-border">
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-30" />
-      <div className="bg-hero-glow pointer-events-none absolute inset-0" />
+    <section className="relative overflow-hidden">
+      {/* Full-bleed photo — tall frame so more of the shot shows */}
+      <div className="relative min-h-[88vh] w-full sm:min-h-[86vh] lg:min-h-[820px] xl:min-h-[880px]">
+        <Image
+          src="/images/home/hero-team.jpg?v=5"
+          alt="A team reviewing branded apparel, drinkware, and gifts together in a bright studio"
+          fill
+          priority
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-center"
+        />
 
-      <Container className="relative py-12 md:py-20 lg:py-24">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-          <div className="min-w-0">
-            <motion.span
-              initial={{ opacity: 0, y: 12 }}
+        {/* Soft shadow for type — keep the photo natural */}
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/10"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/10 to-transparent"
+          aria-hidden
+        />
+
+        <Container className="relative flex min-h-[88vh] flex-col justify-end pb-12 pt-32 sm:min-h-[86vh] sm:pb-14 lg:min-h-[820px] lg:pb-16 xl:min-h-[880px]">
+          <div className="max-w-2xl">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-3 py-1 text-eyebrow text-grey-olive"
+              className="text-sm font-semibold tracking-wide text-brand-gold"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
-              {siteConfig.name}
-            </motion.span>
+              Plus One Promo
+            </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.05 }}
-              className="text-display mt-5 text-taupe md:mt-6"
+              className="text-display mt-3 text-white drop-shadow-sm"
             >
-              Premium branded goods for every business.
+              Custom apparel &amp; goods done right.
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="mt-4 max-w-lg text-base leading-relaxed text-grey-olive md:mt-5 md:text-lg"
+              className="mt-4 max-w-lg text-base leading-relaxed text-white/85 md:text-lg"
             >
-              {siteConfig.mission} One partner for merchandise, print, direct
-              mail, and signage.
+              Team shirts, client gifts, drinkware, and print — we confirm
+              pricing with you before anything goes into production.
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:w-auto sm:flex-row"
+              className="mt-7 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
             >
-              <Button href="/contact" variant="primary" size="lg" className="w-full sm:w-auto">
-                Get a Free Quote
+              <Button
+                href="/contact"
+                variant="secondary"
+                size="lg"
+                className="w-full shadow-md sm:w-auto"
+              >
+                Request a quote
                 <ArrowRight size={16} />
               </Button>
-              <Button href="/products" variant="outline" size="lg" className="w-full sm:w-auto">
-                View Products
+              <Button
+                href="/shop"
+                size="lg"
+                className="w-full border border-white/35 bg-white/15 text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/25 sm:w-auto"
+              >
+                View products
               </Button>
             </motion.div>
-
-            <motion.ul
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              className="mt-6 flex flex-col gap-2 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-2"
-            >
-              {["Free quotes", "Nationwide shipping", "Dedicated support"].map(
-                (item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-1.5 text-sm text-grey-olive"
-                  >
-                    <CheckCircle2
-                      size={15}
-                      className="shrink-0 text-brand-accent"
-                      strokeWidth={2}
-                    />
-                    {item}
-                  </li>
-                ),
-              )}
-            </motion.ul>
           </div>
+        </Container>
+      </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative min-w-0"
-          >
-            <div className="card-surface overflow-hidden p-4 sm:p-5 md:p-6">
-              <div className="mb-4 flex items-center justify-between gap-2 border-b border-border pb-4">
-                <p className="text-sm font-semibold text-taupe">
-                  Product catalog
-                </p>
-                <span className="shrink-0 rounded-md bg-surface px-2 py-0.5 text-xs font-medium text-grey-olive">
-                  50+ categories
+      {/* Trust strip — brand bar under the photo */}
+      <div className="bg-taupe">
+        <Container>
+          <ul className="grid grid-cols-2 sm:grid-cols-4">
+            {trustItems.map((item, index) => (
+              <motion.li
+                key={item.label}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.2 + index * 0.05 }}
+                className="flex items-center gap-2.5 px-3 py-3.5 sm:justify-center sm:px-4 sm:py-4"
+              >
+                <item.icon
+                  size={18}
+                  className="shrink-0 text-brand-gold"
+                  strokeWidth={1.75}
+                />
+                <span className="text-xs font-medium text-white sm:text-sm">
+                  {item.label}
                 </span>
-              </div>
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3">
-                {heroFeatures.map((feature, index) => (
-                  <motion.div
-                    key={feature.name}
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.35, delay: 0.3 + index * 0.05 }}
-                    className="flex min-w-0 items-start gap-3 rounded-xl border border-border bg-surface/60 p-3 sm:p-3.5"
-                  >
-                    <IconBox name={feature.icon} size="sm" variant="accent" />
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-taupe">
-                        {feature.name}
-                      </p>
-                      <p className="text-xs text-grey-olive">
-                        {feature.category}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
-              {stats.slice(0, 3).map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-xl border border-border bg-white px-3 py-2.5 text-center sm:py-3"
-                >
-                  <p className="text-base font-bold tabular-nums text-taupe sm:text-lg">
-                    {stat.value}
-                  </p>
-                  <p className="mt-0.5 text-xs leading-snug text-grey-olive">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </Container>
+              </motion.li>
+            ))}
+          </ul>
+        </Container>
+      </div>
     </section>
   );
 }

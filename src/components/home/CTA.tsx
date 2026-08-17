@@ -12,19 +12,18 @@ export function CTA() {
 
           <div className="relative">
             <p className="text-eyebrow text-brand-gold">
-              Work With {siteConfig.name}
+              Let&apos;s get started
             </p>
             <h2 className="text-section-title mx-auto mt-3 max-w-xl text-white">
-              Ready to elevate your brand?
+              Have a project in mind?
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-silver md:text-base">
-              Tell us about your project and we&apos;ll put together a custom
-              quote. Branded merchandise, print, direct mail — whatever your
-              business needs.
+              Send a few details — what you need, about how many, and when you
+              need it. We&apos;ll reply with options and a clear quote.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button href="/contact" variant="secondary" size="lg">
-                Get a Free Quote
+                Request a quote
                 <ArrowRight size={16} />
               </Button>
               <Button

@@ -40,7 +40,7 @@ export function Header() {
 
           <div className="hidden lg:block">
             <Button href="/contact" variant="primary" size="sm">
-              Get a Quote
+              Request a quote
             </Button>
           </div>
 
@@ -91,7 +91,7 @@ export function Header() {
             className="mt-2 w-full"
             onClick={() => setMobileOpen(false)}
           >
-            Get a Quote
+            Request a quote
           </Button>
         </Container>
       </div>

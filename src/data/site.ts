@@ -2,11 +2,11 @@ import type { IconName } from "@/lib/icons";
 
 export const siteConfig = {
   name: "Plus One Promo",
-  tagline: "Premium branded goods for every business.",
+  tagline: "Custom apparel & goods done right.",
   mission:
-    "Plus One Promo exists to make sure every business — big or small — has access to the best-quality branded goods for their team, customers, and community.",
+    "We help every business — big or small — get quality branded goods for their team, customers, and community.",
   description:
-    "Plus One Promo is a full-service promotional partner helping businesses source, design, and deliver premium branded merchandise, print materials, and marketing collateral — from custom apparel and corporate gifts to business cards, mailers, postcards, EDDM, and yard signs.",
+    "Plus One Promo sources, decorates, and delivers branded merchandise and print — apparel, gifts, business cards, mailers, and more — with clear quotes before production.",
   email: "contact@plus1promo.com",
   phone: "(951) 696-0008",
   url: "https://plus1promo.com",
@@ -14,6 +14,7 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "Services", href: "/services" },
+  { label: "Shop", href: "/shop" },
   { label: "Products", href: "/products" },
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },

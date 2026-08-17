@@ -62,7 +62,7 @@ export default function ServicesPage() {
                   size="md"
                   className="mt-8"
                 >
-                  Get a Quote
+                  Request a quote
                 </Button>
               </div>
             </div>

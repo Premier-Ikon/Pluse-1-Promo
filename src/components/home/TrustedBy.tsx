@@ -8,7 +8,7 @@ export function TrustedBy() {
     <section className="overflow-hidden border-b border-border bg-white py-6">
       <Container>
         <p className="text-eyebrow mb-4 text-center text-grey-olive">
-          Trusted by businesses across every industry
+          Helping teams across
         </p>
 
         {/* Static wrap on mobile — avoids marquee overflow */}

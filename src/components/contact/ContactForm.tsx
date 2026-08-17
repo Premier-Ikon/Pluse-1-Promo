@@ -14,7 +14,7 @@ type ContactFormProps = {
 /** Public Cloud Function URL (not a secret). Env var can override. */
 const CONTACT_API_URL =
   process.env.NEXT_PUBLIC_CONTACT_API_URL?.trim() ||
-  "https://us-west1-contact-form-404005.cloudfunctions.net/contactFormP1P";
+  "https://us-west1-plus-one-promo.cloudfunctions.net/contactFormP1P";
 
 export function ContactForm({ className }: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>("idle");
