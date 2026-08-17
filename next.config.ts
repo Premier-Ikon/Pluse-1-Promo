@@ -18,19 +18,25 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
+    const vcardHeaders = (filename: string) => [
+      {
+        key: "Content-Type",
+        value: "text/vcard; charset=utf-8",
+      },
+      {
+        key: "Content-Disposition",
+        value: `inline; filename="${filename}"`,
+      },
+    ];
+
     return [
       {
         source: "/andres-guzman.vcf",
-        headers: [
-          {
-            key: "Content-Type",
-            value: "text/vcard; charset=utf-8",
-          },
-          {
-            key: "Content-Disposition",
-            value: 'inline; filename="andres-guzman.vcf"',
-          },
-        ],
+        headers: vcardHeaders("andres-guzman.vcf"),
+      },
+      {
+        source: "/dylan-guzman.vcf",
+        headers: vcardHeaders("dylan-guzman.vcf"),
       },
     ];
   },
