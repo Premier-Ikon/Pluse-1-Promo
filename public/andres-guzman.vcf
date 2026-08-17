@@ -3,9 +3,9 @@ VERSION:3.0
 N:Guzman;Andres;;;
 FN:Andres Guzman
 ORG:Plus One Promo
-TITLE:Owner
 TEL;TYPE=WORK,VOICE:+19516960008
-EMAIL;TYPE=INTERNET,WORK:contact@plus1promo.com
+EMAIL;TYPE=INTERNET,WORK:info@plus1promo.com
+ADR;TYPE=WORK:;;24335 Prielipp Rd Suite 118;Wildomar;CA;92595;USA
 URL:https://plus1promo.com
 NOTE:Premium branded goods for every business.
 END:VCARD
