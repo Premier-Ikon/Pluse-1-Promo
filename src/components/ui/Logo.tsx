@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 /** Cache-bust when brand fill color changes (browser/CDN sticky PNGs). */
 const SIGNET_SRC = "/brand/logo-mark-gold.png?v=original";
+const SIGNET_FOOTER_SRC = "/brand/logo-mark-gold-footer.png?v=2";
 const WORDMARK_SRC = "/brand/wordmark-horizontal-web.png?v=1";
 
 type LogoProps = {
@@ -30,11 +31,12 @@ export function Logo({
     ) : variant === "footer" ? (
       <div className={cn("flex items-center gap-2.5", className)}>
         <Image
-          src={SIGNET_SRC}
+          src={SIGNET_FOOTER_SRC}
           alt=""
           width={112}
           height={149}
           className="h-9 w-auto shrink-0"
+          style={{ width: "auto" }}
           aria-hidden
           unoptimized
         />
@@ -43,7 +45,8 @@ export function Logo({
           alt="Plus One Promo"
           width={140}
           height={40}
-          className="h-9 w-auto max-w-[140px]"
+          className="h-8 w-auto max-w-[150px] brightness-0 invert"
+          style={{ width: "auto" }}
           unoptimized
         />
       </div>
@@ -55,6 +58,7 @@ export function Logo({
           width={112}
           height={149}
           className="h-8 w-auto shrink-0 md:h-9"
+          style={{ width: "auto" }}
           priority
           aria-hidden
           unoptimized
@@ -65,6 +69,7 @@ export function Logo({
           width={160}
           height={32}
           className="hidden h-7 w-auto sm:block md:h-8"
+          style={{ width: "auto" }}
           priority
           unoptimized
         />

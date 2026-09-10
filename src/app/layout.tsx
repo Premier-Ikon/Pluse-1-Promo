@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { OrderRequestCartProvider } from "@/components/order/OrderRequestCartProvider";
+import { CustomerAuthProvider } from "@/lib/customerAuth";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
 
@@ -13,14 +15,14 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.name} | Branded Goods & Print for Every Business`,
+    default: `${siteConfig.name} | Custom Goods & Print for Every Business`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   keywords: [
     "Plus One Promo",
     "promotional products",
-    "branded merchandise",
+    "custom merchandise",
     "business cards",
     "direct mail",
     "EDDM",
@@ -55,9 +57,13 @@ export default function RootLayout({
       className={`${montserrat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white text-taupe">
-        <Header />
-        <main className="flex-1 overflow-x-hidden">{children}</main>
-        <Footer />
+        <CustomerAuthProvider>
+          <OrderRequestCartProvider>
+            <Header />
+            <main className="flex-1 overflow-x-hidden">{children}</main>
+            <Footer />
+          </OrderRequestCartProvider>
+        </CustomerAuthProvider>
       </body>
     </html>
   );

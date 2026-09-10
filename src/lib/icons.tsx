@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   Users,
   Zap,
+  Scissors,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -52,6 +53,7 @@ export const icons = {
   shield: ShieldCheck,
   users: Users,
   zap: Zap,
+  needle: Scissors,
 } as const;
 
 export type IconName = keyof typeof icons;

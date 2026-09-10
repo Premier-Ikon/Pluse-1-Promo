@@ -1,0 +1,338 @@
+import type { IconName } from "@/lib/icons";
+
+export type ServiceWorkSample = {
+  src: string;
+  alt: string;
+  caption: string;
+};
+
+export type Service = {
+  id: string;
+  title: string;
+  description: string;
+  longDescription: string;
+  pageIntro: string;
+  icon: IconName;
+  href: string;
+  features: string[];
+  idealFor: string[];
+  heroImage: { src: string; alt: string };
+  work: ServiceWorkSample[];
+};
+
+export const services: Service[] = [
+  {
+    id: "merchandise",
+    title: "Custom Merchandise",
+    description:
+      "Apparel, drinkware, bags, and everyday goods your team will actually use.",
+    longDescription:
+      "We source quality merchandise, apply your logo, and deliver finished goods — from a small team run to a larger program.",
+    pageIntro:
+      "From tees and hoodies to drinkware and totes, we help you pick pieces people keep using — then decorate and deliver with a clear quote before production starts.",
+    icon: "shirt",
+    href: "/services/merchandise",
+    features: [
+      "Custom apparel, headwear, and uniforms",
+      "Drinkware, tumblers, and bottles",
+      "Bags, totes, and backpacks",
+      "Tech accessories and office essentials",
+      "Quality checks before it ships",
+    ],
+    idealFor: [
+      "Team and company apparel programs",
+      "Client and employee giveaways",
+      "Retail or event merch drops",
+      "Ongoing merch refreshes",
+    ],
+    heroImage: {
+      src: "/images/home/hoodie.jpg",
+      alt: "Custom hoodie ready for decoration",
+    },
+    work: [
+      {
+        src: "/images/home/apparel.jpg",
+        alt: "Custom apparel layout",
+        caption: "Team apparel",
+      },
+      {
+        src: "/images/home/drinkware.jpg",
+        alt: "Custom drinkware",
+        caption: "Everyday drinkware",
+      },
+      {
+        src: "/images/home/tote.jpg",
+        alt: "Custom tote bag",
+        caption: "Bags & totes",
+      },
+      {
+        src: "/images/home/hoodie.jpg",
+        alt: "Hoodie flat lay",
+        caption: "Seasonal outerwear",
+      },
+    ],
+  },
+  {
+    id: "embroidery",
+    title: "Embroidered Goods",
+    description:
+      "Polos, caps, jackets, and workwear finished with clean, lasting embroidery.",
+    longDescription:
+      "Embroidery is a staple for uniforms and polished team moments. We help you choose the right garments, place the logo well, and deliver a finished look that holds up.",
+    pageIntro:
+      "Clean stitch work for uniforms, caps, and polished team moments. We match thread, place logos with care, and send proofs before anything hits the machine.",
+    icon: "needle",
+    href: "/services/embroidery",
+    features: [
+      "Polos, jackets, and workwear",
+      "Caps and structured headwear",
+      "Left-chest, sleeve, and multi-location options",
+      "Thread color matching to your logo",
+      "Small runs through larger team programs",
+    ],
+    idealFor: [
+      "Uniforms and field teams",
+      "Executive and client gifts",
+      "Caps and headwear programs",
+      "Jackets and outerwear decoration",
+    ],
+    heroImage: {
+      src: "/images/home/caps.jpg",
+      alt: "Embroidered caps ready for decoration",
+    },
+    work: [
+      {
+        src: "/images/home/caps.jpg",
+        alt: "Structured caps",
+        caption: "Caps & headwear",
+      },
+      {
+        src: "/images/home/apparel.jpg",
+        alt: "Polos and workwear",
+        caption: "Polos & workwear",
+      },
+      {
+        src: "/images/home/hoodie.jpg",
+        alt: "Embroidered outerwear",
+        caption: "Jackets & hoodies",
+      },
+      {
+        src: "/images/home/what-you-need.jpg",
+        alt: "Production detail",
+        caption: "Production detail",
+      },
+    ],
+  },
+  {
+    id: "print",
+    title: "Print & Direct Mail",
+    description:
+      "Business cards, postcards, mailers, EDDM, and yard signs — printed and ready.",
+    longDescription:
+      "From business cards to mailbox campaigns and outdoor signs, we manage print so your materials look sharp and arrive on time.",
+    pageIntro:
+      "Business cards, postcards, EDDM, mailers, and yard signs — managed so your print looks sharp and lands on time, with a clear quote before we go to press.",
+    icon: "printer",
+    href: "/services/print",
+    features: [
+      "Business cards and stationery",
+      "Postcards and direct mail",
+      "Mailers and marketing inserts",
+      "EDDM campaigns",
+      "Yard signs, banners, and outdoor signage",
+    ],
+    idealFor: [
+      "Local marketing campaigns",
+      "Sales and realtor kits",
+      "Grand openings and events",
+      "Ongoing print replenishment",
+    ],
+    heroImage: {
+      src: "/images/home/print.jpg",
+      alt: "Printed marketing materials on a desk",
+    },
+    work: [
+      {
+        src: "/images/home/print.jpg",
+        alt: "Print collateral",
+        caption: "Cards & collateral",
+      },
+      {
+        src: "/images/home/when-you-need.jpg",
+        alt: "Print production",
+        caption: "Press & production",
+      },
+      {
+        src: "/images/home/what-you-need.jpg",
+        alt: "Campaign materials",
+        caption: "Campaign kits",
+      },
+      {
+        src: "/images/home/team.jpg",
+        alt: "Reviewing print materials",
+        caption: "Proof & review",
+      },
+    ],
+  },
+  {
+    id: "gifting",
+    title: "Corporate Gifting",
+    description:
+      "Welcome kits, client gifts, and seasonal boxes that feel personal — not generic.",
+    longDescription:
+      "We build gift programs for onboarding, appreciation, and holidays — logo-decorated, packed, and ready to send.",
+    pageIntro:
+      "Onboarding kits, client appreciation, and seasonal boxes that feel considered — logo-decorated, packed, and ready to send after you approve the quote.",
+    icon: "gift",
+    href: "/services/gifting",
+    features: [
+      "New hire and onboarding kits",
+      "Client appreciation gifts",
+      "Holiday and seasonal campaigns",
+      "Executive and VIP gifting",
+      "Custom packaging options",
+    ],
+    idealFor: [
+      "New hire experiences",
+      "Client and partner thank-yous",
+      "Holiday and milestone gifts",
+      "Executive and VIP moments",
+    ],
+    heroImage: {
+      src: "/images/home/gifts.jpg",
+      alt: "Curated custom gift packaging",
+    },
+    work: [
+      {
+        src: "/images/home/gifts.jpg",
+        alt: "Gift packaging",
+        caption: "Welcome kits",
+      },
+      {
+        src: "/images/home/drinkware.jpg",
+        alt: "Gift drinkware",
+        caption: "Kit essentials",
+      },
+      {
+        src: "/images/home/tote.jpg",
+        alt: "Gift tote",
+        caption: "Packaged totes",
+      },
+      {
+        src: "/images/home/apparel.jpg",
+        alt: "Gift apparel",
+        caption: "Soft goods gifts",
+      },
+    ],
+  },
+  {
+    id: "events",
+    title: "Events & Trade Shows",
+    description:
+      "Booth swag, giveaways, and kits that help you show up prepared.",
+    longDescription:
+      "We source and decorate event gear, then get it where it needs to be — before, during, and after the show.",
+    pageIntro:
+      "Booth swag, attendee kits, and custom signage timed to your show calendar — sourced, decorated, and shipped where it needs to be.",
+    icon: "presentation",
+    href: "/services/events",
+    features: [
+      "Trade show giveaways and booth materials",
+      "Conference and attendee kits",
+      "Custom signage and displays",
+      "Pre-event and on-site fulfillment",
+      "Bulk shipping to venues",
+    ],
+    idealFor: [
+      "Trade shows and expos",
+      "Conferences and summits",
+      "Pop-ups and event activations",
+      "Sponsor and booth packages",
+    ],
+    heroImage: {
+      src: "/images/home/tote.jpg",
+      alt: "Event tote bag ready for decoration",
+    },
+    work: [
+      {
+        src: "/images/home/tote.jpg",
+        alt: "Event totes",
+        caption: "Booth giveaways",
+      },
+      {
+        src: "/images/home/gifts.jpg",
+        alt: "Attendee kits",
+        caption: "Attendee kits",
+      },
+      {
+        src: "/images/home/drinkware.jpg",
+        alt: "Event drinkware",
+        caption: "High-use swag",
+      },
+      {
+        src: "/images/home/hero-team.jpg",
+        alt: "Team preparing for an event",
+        caption: "Show readiness",
+      },
+    ],
+  },
+  {
+    id: "stores",
+    title: "Company Stores & Programs",
+    description:
+      "A simple place for your team or partners to order custom gear with your logo.",
+    longDescription:
+      "We help set up and manage custom ordering programs — catalog, fulfillment, and ongoing support included.",
+    pageIntro:
+      "A simple, custom storefront for employees or partners to order — we help set the catalog, manage fulfillment, and keep the program running smoothly.",
+    icon: "store",
+    href: "/services/stores",
+    features: [
+      "Custom online storefronts",
+      "Employee and client ordering",
+      "Inventory and fulfillment support",
+      "Bulk and individual shipping",
+      "Simple reporting",
+    ],
+    idealFor: [
+      "Employee merch programs",
+      "Dealer and partner stores",
+      "Alumni and fan shops",
+      "Ongoing inventory replenishment",
+    ],
+    heroImage: {
+      src: "/images/home/what-you-need.jpg",
+      alt: "Team reviewing custom program options",
+    },
+    work: [
+      {
+        src: "/images/home/apparel.jpg",
+        alt: "Store apparel assortment",
+        caption: "Catalog apparel",
+      },
+      {
+        src: "/images/home/hoodie.jpg",
+        alt: "Program outerwear",
+        caption: "Seasonal drops",
+      },
+      {
+        src: "/images/home/caps.jpg",
+        alt: "Store headwear",
+        caption: "Headwear options",
+      },
+      {
+        src: "/images/home/team.jpg",
+        alt: "Team collaborating on a program",
+        caption: "Program support",
+      },
+    ],
+  },
+];
+
+export function getServiceById(id: string) {
+  return services.find((service) => service.id === id);
+}
+
+export function getRelatedServices(id: string, limit = 3) {
+  return services.filter((service) => service.id !== id).slice(0, limit);
+}

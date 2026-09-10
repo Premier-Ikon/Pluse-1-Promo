@@ -20,11 +20,11 @@ export function Categories() {
         <div className="mb-12 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between">
           <SectionHeading
             eyebrow="Products"
-            title="Branded goods & print materials"
+            title="Custom goods & print materials"
             description="From custom apparel and drinkware to business cards, postcards, mailers, EDDM, and yard signs."
             className="mb-0 max-w-2xl"
           />
-          <Button href="/products" variant="outline" size="md" className="w-full shrink-0 self-start sm:w-auto md:self-auto">
+          <Button href="/apparel" variant="outline" size="md" className="w-full shrink-0 self-start sm:w-auto md:self-auto">
             View All Products
             <ArrowRight size={16} />
           </Button>

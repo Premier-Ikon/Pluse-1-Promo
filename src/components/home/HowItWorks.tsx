@@ -4,51 +4,59 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { processSteps } from "@/data/site";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { IconBox } from "@/lib/icons";
+import { AppIcon } from "@/lib/icons";
 
 export function HowItWorks() {
   return (
-    <section className="border-t border-border py-20 md:py-28">
+    <section className="border-t border-border py-16 md:py-24">
       <Container>
-        <div className="mb-12 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            eyebrow="Our Process"
-            title="From idea to delivery — we handle it all"
-            description="Simple, transparent, and built around your business — no matter your company size."
-            align="left"
-            className="mb-0 max-w-2xl"
-          />
-          <Button href="/process" variant="outline" size="md" className="w-full shrink-0 self-start sm:w-auto md:self-auto">
-            Learn About Our Process
+        <div className="mb-10 flex flex-col gap-5 md:mb-12 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-xl">
+            <p className="text-eyebrow text-brand-accent-dark">Our process</p>
+            <h2 className="mt-3 text-section-title text-taupe">
+              How an order request works
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-grey-olive md:text-base">
+              Simple steps, clear quotes, and confirmation before anything goes
+              into production.
+            </p>
+          </div>
+          <Button
+            href="/process"
+            variant="outline"
+            size="md"
+            className="w-full shrink-0 self-start sm:w-auto"
+          >
+            See the full process
             <ArrowRight size={16} />
           </Button>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {processSteps.map((step, index) => (
             <motion.div
               key={step.step}
               initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="relative rounded-2xl border border-border bg-white p-6"
+              transition={{ duration: 0.35, delay: index * 0.05 }}
+              className="group flex h-full flex-col rounded-2xl border border-border bg-white p-5 transition-colors hover:border-brand-accent/40 hover:bg-brand-accent-light/30 md:p-6"
             >
-              <span className="text-xs font-semibold tabular-nums text-silver">
-                {step.step}
-              </span>
-              <IconBox
-                name={step.icon}
-                size="md"
-                variant="accent"
-                className="mt-4"
-              />
-              <h3 className="mt-4 text-base font-semibold text-taupe">
+              <div className="flex items-start justify-between gap-3">
+                <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
+                  {step.step}
+                </span>
+                <AppIcon
+                  name={step.icon}
+                  size={18}
+                  className="text-taupe/50 transition-colors group-hover:text-brand-accent-dark"
+                />
+              </div>
+              <h3 className="mt-5 text-base font-semibold tracking-tight text-taupe md:text-lg">
                 {step.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-grey-olive">
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-grey-olive">
                 {step.description}
               </p>
             </motion.div>
