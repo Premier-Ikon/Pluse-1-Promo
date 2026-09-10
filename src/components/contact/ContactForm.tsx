@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 import { ButtonNative } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -11,10 +11,12 @@ type ContactFormProps = {
   className?: string;
 };
 
-/** Public Cloud Function URL (not a secret). Env var can override. */
 const CONTACT_API_URL =
   process.env.NEXT_PUBLIC_CONTACT_API_URL?.trim() ||
   "https://us-west1-plus-one-promo.cloudfunctions.net/contactFormP1P";
+
+const fieldClass =
+  "w-full rounded-lg border border-border bg-white px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/25";
 
 export function ContactForm({ className }: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>("idle");
@@ -65,17 +67,17 @@ export function ContactForm({ className }: ContactFormProps) {
     return (
       <div
         className={cn(
-          "flex flex-col items-center rounded-2xl border border-border bg-white p-12 text-center",
+          "flex flex-col items-center rounded-2xl border border-border bg-white px-6 py-12 text-center sm:px-10",
           className,
         )}
       >
-        <CheckCircle size={48} className="text-brand-accent" />
+        <CheckCircle size={40} className="text-brand-accent-dark" />
         <h3 className="mt-4 text-xl font-semibold text-taupe">
-          Message sent successfully
+          Message sent
         </h3>
-        <p className="mt-2 text-sm text-grey-olive">
-          Thank you for reaching out. We&apos;ll get back to you within one
-          business day — check your inbox for a confirmation email.
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-grey-olive">
+          Thanks for reaching out. We&apos;ll reply within one business day —
+          check your inbox for a confirmation.
         </p>
         <ButtonNative
           variant="outline"
@@ -93,26 +95,32 @@ export function ContactForm({ className }: ContactFormProps) {
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-8 md:p-10",
+        "rounded-2xl border border-border bg-white p-5 sm:p-8 md:p-10",
         className,
       )}
     >
       <div className="grid gap-5 md:grid-cols-2">
         <div>
-          <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-taupe">
-            Full Name *
+          <label
+            htmlFor="name"
+            className="mb-1.5 block text-sm font-medium text-taupe"
+          >
+            Full name *
           </label>
           <input
             id="name"
             name="name"
             type="text"
             required
-            className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-taupe focus:ring-1 focus:ring-taupe/20"
+            className={fieldClass}
             placeholder="Jane Smith"
           />
         </div>
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-taupe">
+          <label
+            htmlFor="email"
+            className="mb-1.5 block text-sm font-medium text-taupe"
+          >
             Email *
           </label>
           <input
@@ -120,47 +128,53 @@ export function ContactForm({ className }: ContactFormProps) {
             name="email"
             type="email"
             required
-            className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-taupe focus:ring-1 focus:ring-taupe/20"
-            placeholder="jane@company.com"
+            className={fieldClass}
+            placeholder="jane@organization.com"
           />
         </div>
         <div>
-          <label htmlFor="company" className="mb-1.5 block text-sm font-medium text-taupe">
-            Company
+          <label
+            htmlFor="company"
+            className="mb-1.5 block text-sm font-medium text-taupe"
+          >
+            Organization
           </label>
           <input
             id="company"
             name="company"
             type="text"
-            className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-taupe focus:ring-1 focus:ring-taupe/20"
-            placeholder="Your Company"
+            className={fieldClass}
+            placeholder="Business, church, team, etc."
           />
         </div>
         <div>
-          <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-taupe">
+          <label
+            htmlFor="phone"
+            className="mb-1.5 block text-sm font-medium text-taupe"
+          >
             Phone
           </label>
           <input
             id="phone"
             name="phone"
             type="tel"
-            className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-taupe focus:ring-1 focus:ring-taupe/20"
+            className={fieldClass}
             placeholder="(951) 696-0008"
           />
         </div>
       </div>
 
       <div className="mt-5">
-        <label htmlFor="projectType" className="mb-1.5 block text-sm font-medium text-taupe">
-          Project Type
-        </label>
-        <select
-          id="projectType"
-          name="projectType"
-          className="w-full rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors focus:border-taupe focus:ring-1 focus:ring-taupe/20"
+        <label
+          htmlFor="projectType"
+          className="mb-1.5 block text-sm font-medium text-taupe"
         >
+          Project type
+        </label>
+        <select id="projectType" name="projectType" className={fieldClass}>
           <option value="">Select a project type</option>
-          <option value="branded-merchandise">Branded Merchandise</option>
+          <option value="custom-merchandise">Custom Merchandise</option>
+          <option value="embroidery">Embroidered Goods</option>
           <option value="print-direct-mail">Print & Direct Mail</option>
           <option value="business-cards">Business Cards</option>
           <option value="postcards-mailers">Postcards & Mailers</option>
@@ -174,7 +188,10 @@ export function ContactForm({ className }: ContactFormProps) {
       </div>
 
       <div className="mt-5">
-        <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-taupe">
+        <label
+          htmlFor="message"
+          className="mb-1.5 block text-sm font-medium text-taupe"
+        >
           Tell us about your project *
         </label>
         <textarea
@@ -182,8 +199,8 @@ export function ContactForm({ className }: ContactFormProps) {
           name="message"
           required
           rows={5}
-          className="w-full resize-none rounded-lg border border-border bg-surface px-4 py-3 text-base text-taupe outline-none transition-colors placeholder:text-grey-olive/60 focus:border-taupe focus:ring-1 focus:ring-taupe/20"
-          placeholder="What products are you interested in? What's your timeline and estimated quantity?"
+          className={cn(fieldClass, "resize-none")}
+          placeholder="What do you need, about how many, and when do you need it?"
         />
       </div>
 
@@ -196,7 +213,7 @@ export function ContactForm({ className }: ContactFormProps) {
 
       <ButtonNative
         type="submit"
-        variant="primary"
+        variant="secondary"
         size="lg"
         className="mt-6 w-full"
         disabled={formState === "loading"}
@@ -205,8 +222,8 @@ export function ContactForm({ className }: ContactFormProps) {
           "Sending..."
         ) : (
           <>
-            Send Message
-            <Send size={18} />
+            Request a quote
+            <ArrowRight size={16} />
           </>
         )}
       </ButtonNative>

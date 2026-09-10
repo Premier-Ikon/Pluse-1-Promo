@@ -1,120 +1,26 @@
 import type { IconName } from "@/lib/icons";
 
+export { services, getServiceById, getRelatedServices } from "@/data/services";
+export type { Service, ServiceWorkSample } from "@/data/services";
+
 export const siteConfig = {
   name: "Plus One Promo",
   tagline: "Custom apparel & goods done right.",
   mission:
-    "We help every business — big or small — get quality branded goods for their team, customers, and community.",
+    "Help every business and person get access to high-quality goods made to last — at an affordable price.",
   description:
-    "Plus One Promo sources, decorates, and delivers branded merchandise and print — apparel, gifts, business cards, mailers, and more — with clear quotes before production.",
-  email: "contact@plus1promo.com",
+    "Plus One Promo sources, decorates, and delivers custom merchandise and print — apparel, gifts, business cards, mailers, and more — with clear quotes before production.",
+  email: "info@plus1promo.com",
   phone: "(951) 696-0008",
   url: "https://plus1promo.com",
 };
 
 export const navLinks = [
   { label: "Services", href: "/services" },
-  { label: "Shop", href: "/shop" },
-  { label: "Products", href: "/products" },
+  { label: "Apparel", href: "/apparel" },
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-];
-
-export const services: {
-  id: string;
-  title: string;
-  description: string;
-  longDescription: string;
-  icon: IconName;
-  href: string;
-  features: string[];
-}[] = [
-  {
-    id: "merchandise",
-    title: "Branded Merchandise",
-    description:
-      "Custom apparel, drinkware, bags, tech accessories, and everyday essentials — curated for quality and designed to represent your brand with pride.",
-    longDescription:
-      "Your team and customers deserve products they'll actually use. Plus One Promo sources premium branded merchandise from trusted suppliers, handles logo application and color matching, and delivers finished goods ready to impress — whether you need 50 pieces or 50,000.",
-    icon: "shirt",
-    href: "/services#merchandise",
-    features: [
-      "Custom apparel, headwear, and uniforms",
-      "Drinkware, tumblers, and bottles",
-      "Bags, totes, and backpacks",
-      "Tech accessories and office essentials",
-      "Quality control and brand consistency",
-    ],
-  },
-  {
-    id: "print",
-    title: "Print & Direct Mail",
-    description:
-      "Business cards, postcards, mailers, EDDM campaigns, yard signs, and more — professionally printed and ready to put your brand in front of the right audience.",
-    longDescription:
-      "From the conference room to the mailbox to the front lawn, Plus One Promo produces high-quality print and direct mail materials that keep your brand visible. We manage design, production, and delivery so your marketing collateral looks sharp and arrives on time.",
-    icon: "printer",
-    href: "/services#print",
-    features: [
-      "Business cards and stationery",
-      "Postcards and direct mail pieces",
-      "Mailers and marketing inserts",
-      "EDDM (Every Door Direct Mail) campaigns",
-      "Yard signs, banners, and outdoor signage",
-    ],
-  },
-  {
-    id: "gifting",
-    title: "Corporate Gifting",
-    description:
-      "Thoughtfully curated gift kits for client appreciation, employee milestones, holidays, and onboarding — beautifully branded and ready to send.",
-    longDescription:
-      "A well-timed gift builds loyalty. Plus One Promo designs and assembles corporate gift programs that feel personal and premium — from new hire welcome kits to client thank-you boxes and seasonal campaigns tailored to your brand.",
-    icon: "gift",
-    href: "/services#gifting",
-    features: [
-      "New hire and onboarding kits",
-      "Client appreciation gifts",
-      "Holiday and seasonal campaigns",
-      "Executive and VIP gifting",
-      "Custom packaging and unboxing experiences",
-    ],
-  },
-  {
-    id: "events",
-    title: "Events & Trade Shows",
-    description:
-      "Premium booth swag, branded giveaways, and event kits that help you stand out — with fulfillment handled before, during, and after the show.",
-    longDescription:
-      "Trade shows and events are high-stakes brand moments. Plus One Promo helps you show up prepared with premium promotional products, printed materials, and coordinated kits — sourced, branded, and delivered on your timeline.",
-    icon: "presentation",
-    href: "/services#events",
-    features: [
-      "Trade show giveaways and booth materials",
-      "Conference and attendee kits",
-      "Branded signage and display items",
-      "Pre-event and on-site fulfillment",
-      "Bulk shipping to venues nationwide",
-    ],
-  },
-  {
-    id: "stores",
-    title: "Company Stores & Programs",
-    description:
-      "Branded online stores and managed programs that give your team, clients, and partners one place to order your products — on brand, every time.",
-    longDescription:
-      "Scale your brand experience with a company store built and managed by Plus One Promo. We handle storefront design, product catalog management, inventory, fulfillment, and reporting — so your branded goods program runs smoothly at any size.",
-    icon: "store",
-    href: "/services#stores",
-    features: [
-      "Custom-branded online storefronts",
-      "Employee and client ordering portals",
-      "Inventory and fulfillment management",
-      "Bulk and individual shipping",
-      "Reporting and program analytics",
-    ],
-  },
 ];
 
 export const productGroups: {
@@ -129,22 +35,22 @@ export const productGroups: {
   }[];
 }[] = [
   {
-    id: "branded-goods",
-    title: "Branded Merchandise",
+    id: "custom-goods",
+    title: "Custom Merchandise",
     description:
       "Premium promotional products your team and customers will reach for again and again.",
     items: [
       {
         name: "Apparel & Headwear",
         description:
-          "T-shirts, polos, jackets, caps, and uniforms — customized with your logo and brand colors.",
+          "T-shirts, polos, jackets, caps, and uniforms — customized with your logo and colors.",
         count: "3,400+ styles",
         icon: "shirt",
       },
       {
         name: "Drinkware",
         description:
-          "Tumblers, water bottles, mugs, and barware built for daily use and lasting brand visibility.",
+          "Tumblers, water bottles, mugs, and barware built for daily use and lasting everyday visibility.",
         count: "2,100+ styles",
         icon: "coffee",
       },
@@ -158,21 +64,21 @@ export const productGroups: {
       {
         name: "Tech & Gadgets",
         description:
-          "Power banks, speakers, USB drives, and tech accessories that keep your brand connected.",
+          "Power banks, speakers, USB drives, and tech accessories that keep your organization visible.",
         count: "1,600+ styles",
         icon: "smartphone",
       },
       {
         name: "Office & Writing",
         description:
-          "Notebooks, pens, desk accessories, and writing instruments for professional brand touchpoints.",
+          "Notebooks, pens, desk accessories, and writing instruments for professional everyday touchpoints.",
         count: "2,000+ styles",
         icon: "pen",
       },
       {
         name: "Gift Kits",
         description:
-          "Curated, branded gift combinations for onboarding, appreciation, and special occasions.",
+          "Curated, custom gift combinations for onboarding, appreciation, and special occasions.",
         count: "500+ combinations",
         icon: "gift",
       },
@@ -182,7 +88,7 @@ export const productGroups: {
     id: "print-marketing",
     title: "Print & Marketing Materials",
     description:
-      "Professional print and direct mail products that put your brand directly in your audience's hands.",
+      "Professional print and direct mail products that put your message directly in your audience's hands.",
     items: [
       {
         name: "Business Cards",
@@ -201,14 +107,14 @@ export const productGroups: {
       {
         name: "Mailers",
         description:
-          "Branded mailers, flyers, and marketing inserts designed for campaigns that need to stand out in the mailbox.",
+          "Custom mailers, flyers, and marketing inserts designed for campaigns that need to stand out in the mailbox.",
         count: "Custom sizes available",
         icon: "package",
       },
       {
         name: "EDDM",
         description:
-          "Every Door Direct Mail campaigns to reach neighborhoods and local markets with targeted brand messaging.",
+          "Every Door Direct Mail campaigns to reach neighborhoods and local markets with targeted local messaging.",
         count: "Route-based targeting",
         icon: "map",
       },
@@ -237,7 +143,7 @@ export const heroFeatures: {
   category: string;
   icon: IconName;
 }[] = [
-  { name: "Branded Apparel", category: "Merchandise", icon: "shirt" },
+  { name: "Custom Apparel", category: "Merchandise", icon: "shirt" },
   { name: "Business Cards", category: "Print", icon: "card" },
   { name: "Custom Drinkware", category: "Merchandise", icon: "coffee" },
   { name: "Direct Mail", category: "Print", icon: "mail" },
@@ -256,48 +162,48 @@ export const processSteps: {
     title: "Connect",
     icon: "message",
     description:
-      "Share your goals, audience, timeline, and budget. Whether you need branded hoodies or an EDDM campaign, we start by understanding what success looks like for your business.",
+      "Tell us what you need, your timeline, and your budget. We’ll ask the right questions so we start in the right place.",
   },
   {
     step: "02",
     title: "Design & Quote",
     icon: "palette",
     description:
-      "Our team prepares product recommendations, design proofs, and a clear quote. You'll review every detail — logo placement, materials, quantities, and delivery — before anything goes into production.",
+      "You get product options, proofs, and a clear quote. Nothing moves forward until you approve the details.",
   },
   {
     step: "03",
     title: "Produce",
     icon: "package",
     description:
-      "Once approved, Plus One Promo manages sourcing, printing, quality control, and production timelines. We keep you updated so there are never surprises.",
+      "We source, decorate, and quality-check your order — and keep you posted along the way.",
   },
   {
     step: "04",
     title: "Deliver",
     icon: "truck",
     description:
-      "Finished goods ship to one location or thousands. From warehouse bulk orders to individual gift shipments, we handle fulfillment so your branded products arrive on time and on brand.",
+      "Finished goods ship where they need to go — one address or many — on the timeline we confirmed.",
   },
 ];
 
 export const processDetails = [
   {
-    title: "Built for businesses of every size",
+    title: "Works for any company size",
     description:
-      "Whether you're a local shop ordering 100 yard signs or a national company launching a full employee gifting program, Plus One Promo scales to meet your needs without compromising on quality.",
+      "Small team runs and larger programs get the same care, clear quotes, and quality checks.",
     icon: "layers" as IconName,
   },
   {
-    title: "One partner, every product category",
+    title: "One partner for more categories",
     description:
-      "Stop juggling multiple vendors for merchandise, print, and mail. Plus One Promo brings branded goods, business cards, mailers, postcards, EDDM, and signage under one roof.",
+      "Merchandise, embroidery, print, and gifts without juggling a stack of vendors.",
     icon: "sparkles" as IconName,
   },
   {
-    title: "Transparent from start to finish",
+    title: "Clear from start to finish",
     description:
-      "Clear quotes, proactive communication, and honest timelines. You'll always know where your order stands and who to contact if you have questions.",
+      "Honest timelines, proactive updates, and a real person to talk to when you have questions.",
     icon: "shield" as IconName,
   },
 ];
@@ -305,21 +211,21 @@ export const processDetails = [
 export const testimonials = [
   {
     quote:
-      "Plus One Promo made it easy for us to outfit our entire team with quality branded gear — and the onboarding kits they put together have been a hit with every new hire.",
+      "We sent one request for team apparel and onboarding kits. Plus One came back with options, a clear quote, and gear that actually feels like you — not the generic promo stuff.",
     author: "Sarah Chen",
     role: "VP of People, Meridian Health",
   },
   {
     quote:
-      "We needed business cards, postcards, and yard signs for a local campaign on a tight deadline. Plus One Promo handled everything in one place and delivered exactly what we needed.",
+      "Business cards, postcards, and yard signs on a tight deadline. One partner handled the print stack and delivered exactly what we needed.",
     author: "Marcus Rivera",
     role: "Marketing Director, Apex Digital",
   },
   {
     quote:
-      "They understand that our brand matters. Every product and print piece feels premium — not like the generic promo stuff you get everywhere else.",
+      "They treat our organization like it matters. Proofs look right, timelines stay honest, and we always know where the order stands.",
     author: "Emily Hartwell",
-    role: "Brand Manager, Northwind Collective",
+    role: "Operations Lead, Northwind Collective",
   },
 ];
 
@@ -355,7 +261,7 @@ export const portfolioItems: {
   },
   {
     title: "Trade Show & Event Swag",
-    client: "National SaaS Brand",
+    client: "National software company",
     icon: "presentation",
   },
   {
@@ -364,7 +270,7 @@ export const portfolioItems: {
     icon: "mail",
   },
   {
-    title: "Branded Apparel Program",
+    title: "Custom Apparel Program",
     client: "Creative Agency",
     icon: "shirt",
   },
@@ -376,29 +282,36 @@ export const values: {
   icon: IconName;
 }[] = [
   {
-    title: "Quality Without Compromise",
+    title: "Quality made to last",
     icon: "shield",
     description:
-      "Every business deserves access to the best. We source products and print materials we'd be proud to put our own name on — because your brand deserves nothing less.",
+      "We source and finish goods we'd put our own name on — durable products and clean decoration that hold up beyond a one-time promo moment.",
   },
   {
-    title: "Accessible to All",
+    title: "Access for every business",
     icon: "users",
     description:
-      "Big or small, every client gets the same level of care, attention, and access to premium goods. No minimum ego — just great products at every scale.",
+      "Big or small, every client gets the same care and clear quotes. High-quality custom goods shouldn't be reserved for the biggest budgets.",
   },
   {
-    title: "Design That Represents You",
+    title: "Design that represents you",
     icon: "palette",
     description:
-      "Your logo, colors, and brand standards matter. We treat every imprint, print run, and packaging detail as a reflection of your business — not an afterthought.",
+      "Your logo, colors, and standards matter. We treat every imprint and print run as a reflection of your business — not an afterthought.",
   },
   {
-    title: "A Partner, Not a Vendor",
+    title: "A partner, not a vendor",
     icon: "sparkles",
     description:
-      "Plus One Promo works alongside your team with responsive communication, honest guidance, and a genuine investment in your results.",
+      "Real people, honest guidance, and responsive support — we stay with you from the first request through delivery.",
   },
+];
+
+export const aboutHighlights = [
+  { value: "Women-owned", label: "Locally rooted business" },
+  { value: "15+ years", label: "Hands-on industry experience" },
+  { value: "One goal", label: "Quality goods for every budget" },
+  { value: "Clear quotes", label: "Before production starts" },
 ];
 
 export const whyPlusOne: {
@@ -410,7 +323,7 @@ export const whyPlusOne: {
     title: "Full-service under one roof",
     icon: "layers",
     description:
-      "Branded merchandise, print, direct mail, and signage — managed by one team that knows your brand.",
+      "Custom merchandise, print, direct mail, and signage — managed by one team that knows your organization.",
   },
   {
     title: "Premium quality at every quantity",

@@ -26,7 +26,7 @@ export function Hero() {
       <div className="relative min-h-[88vh] w-full sm:min-h-[86vh] lg:min-h-[820px] xl:min-h-[880px]">
         <Image
           src="/images/home/hero-team.jpg?v=5"
-          alt="A team reviewing branded apparel, drinkware, and gifts together in a bright studio"
+          alt="A team reviewing custom apparel, drinkware, and gifts together in a bright studio"
           fill
           priority
           unoptimized
@@ -90,7 +90,7 @@ export function Hero() {
                 <ArrowRight size={16} />
               </Button>
               <Button
-                href="/shop"
+                href="/apparel"
                 size="lg"
                 className="w-full border border-white/35 bg-white/15 text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/25 sm:w-auto"
               >
