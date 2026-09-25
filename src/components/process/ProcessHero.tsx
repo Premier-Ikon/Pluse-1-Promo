@@ -12,11 +12,11 @@ export function ProcessHero() {
     <section className="relative overflow-hidden">
       <div className="relative min-h-[68vh] w-full sm:min-h-[62vh] lg:min-h-[560px] xl:min-h-[600px]">
         <Image
-          src="/images/home/when-you-need.jpg?v=1"
+          src="/images/home/about-marquee-screenprint.jpg"
           alt="Screen printing and production in progress"
           fill
           priority
-          unoptimized
+          quality={90}
           sizes="100vw"
           className="object-cover object-center"
         />

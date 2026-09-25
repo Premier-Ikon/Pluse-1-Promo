@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/home/CTA";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { fetchCatalogProducts } from "@/lib/catalog";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Apparel",
@@ -38,82 +38,99 @@ export default async function ApparelPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHero
-        eyebrow="Apparel"
-        title={
-          brandFilter
-            ? `${brandFilter} apparel`
-            : "Custom apparel for every team."
-        }
-        description={
-          brandFilter
-            ? `Styles from ${brandFilter} in our catalog. Configure colors, sizes, and decoration, then send an order request.`
-            : "Browse tees, hoodies, hats, and more. Pick your colors and sizes, then request a quote — no online payment."
-        }
-      />
+      <section className="relative overflow-hidden bg-surface">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
+        <div className="bg-hero-glow pointer-events-none absolute inset-0 opacity-70" />
 
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-brand-accent-dark">
-                Catalog
-              </p>
-              <h2 className="mt-1 text-section-title text-taupe">
-                {brandFilter ? brandFilter : "All apparel"}
-              </h2>
-              {brandFilter && (
-                <Link
-                  href="/apparel"
-                  className="mt-2 inline-block text-sm font-medium text-brand-accent-dark hover:underline"
-                >
-                  Clear brand filter
-                </Link>
-              )}
-            </div>
-            <p className="max-w-sm text-sm text-grey-olive">
-              Prices shown are estimates for planning. Your request is reviewed
-              before production.
+        <Container className="relative pt-10 pb-16 md:pt-14 md:pb-24">
+          <div className="max-w-2xl">
+            <p className="text-eyebrow text-brand-accent-dark">Apparel</p>
+            <h1 className="mt-3 text-section-title text-taupe">
+              {brandFilter
+                ? `${brandFilter} apparel`
+                : "Custom apparel for every team."}
+            </h1>
+            <p className="mt-4 text-sm leading-relaxed text-grey-olive md:text-base">
+              {brandFilter
+                ? `Styles from ${brandFilter} in our catalog. Configure colors, sizes, and decoration, then send an order request.`
+                : "Browse tees, hoodies, hats, and more. Pick your colors and sizes, then request a quote — no online payment."}
             </p>
           </div>
 
-          {!brandFilter && brands.length > 0 && (
-            <div className="mb-8 flex flex-wrap gap-2">
-              {brands.map((b) => (
-                <Link
-                  key={b}
-                  href={`/apparel?brand=${encodeURIComponent(b)}`}
-                  className="rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-medium text-grey-olive transition hover:border-brand-accent/40 hover:text-taupe"
-                >
-                  {b}
-                </Link>
-              ))}
+          {brands.length > 0 && (
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <Link
+                href="/apparel"
+                className={cn(
+                  "rounded-lg border px-3 py-1.5 text-xs font-medium transition",
+                  !brandFilter
+                    ? "border-brand-accent bg-brand-accent-light/80 text-taupe"
+                    : "border-border bg-white text-grey-olive hover:border-brand-accent/40 hover:text-taupe",
+                )}
+              >
+                All
+              </Link>
+              {brands.map((b) => {
+                const active = Boolean(
+                  brandFilter &&
+                    (brandFilter.toLowerCase() === b.toLowerCase() ||
+                      b.toLowerCase().includes(brandFilter.toLowerCase())),
+                );
+                return (
+                  <Link
+                    key={b}
+                    href={`/apparel?brand=${encodeURIComponent(b)}`}
+                    className={cn(
+                      "rounded-lg border px-3 py-1.5 text-xs font-medium transition",
+                      active
+                        ? "border-brand-accent bg-brand-accent-light/80 text-taupe"
+                        : "border-border bg-white text-grey-olive hover:border-brand-accent/40 hover:text-taupe",
+                    )}
+                  >
+                    {b}
+                  </Link>
+                );
+              })}
             </div>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <p className="mt-8 text-sm text-grey-olive">
+            {products.length} style{products.length === 1 ? "" : "s"}
+            {brandFilter ? ` · ${brandFilter}` : ""}
+            <span className="mx-2 text-border">·</span>
+            Estimates for planning — we confirm pricing before production.
+          </p>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
           {products.length === 0 && (
-            <p className="rounded-2xl border border-dashed border-border px-4 py-12 text-center text-sm text-grey-olive">
+            <p className="mt-6 rounded-2xl border border-dashed border-border bg-white px-4 py-12 text-center text-sm text-grey-olive">
               {brandFilter
                 ? `No published products for ${brandFilter} yet. Try another brand or browse all apparel.`
                 : "No products published yet. Check back soon."}
             </p>
           )}
 
-          <div className="mt-12 rounded-2xl border border-border bg-surface p-6 text-center md:p-8">
-            <h3 className="text-lg font-semibold text-taupe">
-              Looking for something else?
-            </h3>
-            <p className="mx-auto mt-2 max-w-lg text-sm text-grey-olive">
-              We source thousands of styles beyond this catalog. Tell us what you
-              need and we&apos;ll build a custom quote.
-            </p>
-            <Button href="/contact" variant="primary" size="md" className="mt-5">
+          <div className="mt-12 flex flex-col gap-4 rounded-2xl border border-brand-accent/30 bg-brand-accent-light/50 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6 md:mt-14">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-taupe">
+                Looking for something else?
+              </p>
+              <p className="mt-0.5 text-sm leading-relaxed text-grey-olive">
+                We source thousands of styles beyond this catalog. Tell us what
+                you need and we&apos;ll build a custom quote.
+              </p>
+            </div>
+            <Button
+              href="/contact"
+              variant="primary"
+              size="sm"
+              className="w-full shrink-0 sm:w-auto"
+            >
               Custom quote
               <ArrowUpRight size={16} />
             </Button>

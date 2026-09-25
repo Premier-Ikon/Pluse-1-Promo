@@ -17,19 +17,19 @@ const tabs = [
     title: "The right product for the job",
     body: "Apparel, drinkware, print, and gifts — we’ll help you pick what fits your team, event, or campaign.",
     points: ["Custom apparel & headwear", "Drinkware & everyday goods", "Print, mailers & signage"],
-    image: "/images/home/what-you-need.jpg",
-    imageAlt: "A professional team in coordinated custom apparel on a job site",
+    image: "/images/home/about-marquee-truck-barn.jpg",
+    imageAlt: "Branded service truck ready for the day",
     cta: { href: "/shop", label: "Browse the shop" },
   },
   {
     id: "make",
     number: "02",
-    label: "How you make it",
+    label: "How we make it",
     title: "Decoration that fits your organization",
     body: "Screen print, embroidery, or DTF — and Design Studio support if you still need artwork.",
     points: ["Screen print & embroidery", "DTF and specialty options", "Artwork help when you need it"],
-    image: "/images/home/hoodie.jpg",
-    imageAlt: "Custom hoodie showing decoration quality",
+    image: "/images/home/about-marquee-screenprint.jpg",
+    imageAlt: "Screen printing presses on the production floor",
     cta: { href: "/contact?intent=design", label: "Open Design Studio" },
   },
   {
@@ -39,8 +39,8 @@ const tabs = [
     title: "A timeline that works",
     body: "Share your need-by date on the request. We’ll confirm what’s realistic before production starts.",
     points: ["Standard for planned runs", "Rush when dates are tight", "Clear timing before we start"],
-    image: "/images/home/when-you-need.jpg",
-    imageAlt: "Screen printing production floor with shirts on press and stacked finished apparel",
+    image: "/images/home/about-marquee-warehouse.jpg",
+    imageAlt: "Organized warehouse inventory ready to ship",
     cta: { href: "/shop", label: "Start an order request" },
   },
   {
@@ -50,8 +50,8 @@ const tabs = [
     title: "Request now. Confirm before production.",
     body: "No online checkout. You send a request, we review it, then you approve the quote when it looks right.",
     points: ["Submit an order request", "Get a clear quote back", "Approve before we produce"],
-    image: "/images/home/hero-team.jpg",
-    imageAlt: "Team reviewing custom products together",
+    image: "/images/home/about-marquee-embroidery.jpg",
+    imageAlt: "Multi-head embroidery machines in production",
     cta: { href: "/contact", label: "Talk with us" },
   },
 ] as const;
@@ -74,7 +74,7 @@ export function ProductBento() {
         </div>
 
         {/* Tabs */}
-        <div className="mt-10 flex gap-2 overflow-x-auto pb-1 md:mt-12 md:flex-wrap md:justify-center lg:justify-start">
+        <div className="mt-10 flex gap-2 overflow-x-auto py-1 md:mt-12 md:flex-wrap md:overflow-visible md:justify-center lg:justify-start">
           {tabs.map((tab) => {
             const selected = tab.id === activeId;
             return (
@@ -158,7 +158,7 @@ export function ProductBento() {
                   src={active.image}
                   alt={active.imageAlt}
                   fill
-                  unoptimized
+                  quality={90}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-center"
                 />

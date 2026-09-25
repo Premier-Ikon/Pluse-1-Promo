@@ -10,18 +10,26 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { BrandSelect } from "@/components/quote/BrandSelect";
+import { PastDesignPicker } from "@/components/quote/PastDesignPicker";
+import { AddedToOrderModal } from "@/components/shop/AddedToOrderModal";
+import { ArtworkAttachmentCard } from "@/components/ui/ArtworkAttachmentCard";
+import { useOrderRequestCart } from "@/components/order/OrderRequestCartProvider";
 import {
-  submitOrderRequest,
   uploadArtworkFile,
   type CatalogProduct,
   type DecorationMethod,
 } from "@/lib/catalog";
+import {
+  minNeedByDate,
+  timelineFromNeedBy,
+  writeOrderRequestDraft,
+} from "@/lib/orderRequestDraft";
 import { cn } from "@/lib/utils";
 
-type Step = "products" | "configure" | "design" | "timeline" | "contact";
+type Step = "products" | "configure" | "design" | "timeline" | "confirm";
 
 type ConfigState = {
   selectedColors: string[];
@@ -46,13 +54,25 @@ const STEPS: Array<{ id: Step; label: string }> = [
   { id: "configure", label: "Details" },
   { id: "design", label: "Design" },
   { id: "timeline", label: "Timeline" },
-  { id: "contact", label: "Submit" },
+  { id: "confirm", label: "Confirm" },
 ];
 
-const DELIVERY = [
-  { id: "standard", label: "Standard", hint: "Typical turnaround" },
-  { id: "rush", label: "Rush", hint: "Faster when available" },
-  { id: "flexible", label: "Flexible", hint: "No hard deadline" },
+const TIMELINE_OPTIONS = [
+  {
+    id: "rush" as const,
+    label: "Rush",
+    hint: "About 5–7 days — faster when the calendar allows",
+  },
+  {
+    id: "standard" as const,
+    label: "Standard",
+    hint: "About 10–14 days — typical production window",
+  },
+  {
+    id: "flexible" as const,
+    label: "Flexible",
+    hint: "More than two weeks — room to plan production",
+  },
 ];
 
 function emptyConfig(product: CatalogProduct, methods: DecorationMethod[]): ConfigState {
@@ -89,6 +109,7 @@ type Props = {
 };
 
 export function QuoteWizard({ products, methods }: Props) {
+  const { addItem } = useOrderRequestCart();
   const [step, setStep] = useState<Step>("products");
   const [query, setQuery] = useState("");
   const [brand, setBrand] = useState("");
@@ -101,18 +122,20 @@ export function QuoteWizard({ products, methods }: Props) {
     artworkFileName: "",
     uploading: false,
   });
-  const [deliverySpeed, setDeliverySpeed] = useState("standard");
   const [needByDate, setNeedByDate] = useState("");
-  const [contact, setContact] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-  });
   const [specialInstructions, setSpecialInstructions] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<string | null>(null);
+  const [showAddedModal, setShowAddedModal] = useState(false);
+  const [addedSummary, setAddedSummary] = useState<{
+    name: string;
+    image?: string;
+  } | null>(null);
+
+  const autoTimeline = useMemo(
+    () => (needByDate ? timelineFromNeedBy(needByDate) : null),
+    [needByDate],
+  );
+  const earliestNeedBy = useMemo(() => minNeedByDate(), []);
 
   const brands = useMemo(
     () =>
@@ -237,13 +260,20 @@ export function QuoteWizard({ products, methods }: Props) {
       setStep("design");
       return;
     }
-    if (step === "design") setStep("timeline");
+    if (step === "design") {
+      setStep("timeline");
+      return;
+    }
     if (step === "timeline") {
-      if (!deliverySpeed) {
-        setError("Choose a timeline.");
+      if (!needByDate) {
+        setError("Choose a need-by date so we can set the right timeline.");
         return;
       }
-      setStep("contact");
+      if (!autoTimeline) {
+        setError("Need-by date must be at least one day from today.");
+        return;
+      }
+      setStep("confirm");
     }
   }
 
@@ -254,140 +284,139 @@ export function QuoteWizard({ products, methods }: Props) {
       "configure",
       "design",
       "timeline",
-      "contact",
+      "confirm",
     ];
     const idx = order.indexOf(step);
     if (idx > 0) setStep(order[idx - 1]);
   }
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function resetWizard() {
+    setStep("products");
+    setQuery("");
+    setBrand("");
+    setSelectedIds([]);
+    setConfigs({});
+    setDesign({
+      hasArtwork: true,
+      notes: "",
+      artworkUrl: "",
+      artworkFileName: "",
+      uploading: false,
+    });
+    setNeedByDate("");
+    setSpecialInstructions("");
     setError(null);
-    if (!contact.name.trim() || !contact.email.trim()) {
-      setError("Add your name and email so we can send the quote.");
-      return;
-    }
+    setAddedSummary(null);
+  }
+
+  function handleAddToOrderRequest() {
+    setError(null);
     const cfgError = validateConfigure();
     if (cfgError) {
       setError(cfgError);
       setStep("configure");
       return;
     }
-
-    setSubmitting(true);
-    const estimate = selectedProducts.reduce((sum, product) => {
-      const cfg = configs[product.id];
-      return sum + (product.pricing?.basePrice || 0) * configQty(cfg);
-    }, 0);
-
-    const result = await submitOrderRequest({
-      items: selectedProducts.map((product) => {
-        const cfg = configs[product.id];
-        const method = methods.find((m) => m.id === cfg.methodId);
-        const variants = cfg.selectedColors
-          .map((colorName) => {
-            const color = product.colors?.find((c) => c.name === colorName);
-            const sizes = Object.entries(cfg.sizeQtyByColor[colorName] || {})
-              .filter(([, qty]) => qty > 0)
-              .map(([size, qty]) => ({ size, qty }));
-            if (!sizes.length) return null;
-            return {
-              color: { name: colorName, hex: color?.hex },
-              sizes,
-            };
-          })
-          .filter(Boolean) as Array<{
-          color: { name: string; hex?: string };
-          sizes: Array<{ size: string; qty: number }>;
-        }>;
-
-        const preview =
-          product.colors?.find((c) => c.name === cfg.previewColor) ||
-          product.colors?.find((c) => cfg.selectedColors.includes(c.name)) ||
-          product.colors?.[0];
-
-        return {
-          productId: product.id,
-          productName: product.name,
-          productSlug: product.slug,
-          imageUrl:
-            preview?.imageUrl || product.imageThumbUrl || product.imageUrl,
-          variants,
-          decoration: {
-            method: method?.label || cfg.methodId,
-            locations: cfg.locations,
-            colors: method?.askInkColors ? cfg.inkColors : undefined,
-          },
-          design: {
-            hasArtwork: design.hasArtwork,
-            notes: design.notes.trim() || undefined,
-            artworkUrl: design.artworkUrl.trim() || undefined,
-          },
-        };
-      }),
-      delivery: {
-        speed: deliverySpeed,
-        needByDate: needByDate || undefined,
-      },
-      contact: {
-        name: contact.name.trim(),
-        email: contact.email.trim(),
-        phone: contact.phone.trim() || undefined,
-        company: contact.company.trim() || undefined,
-      },
-      estimatedTotal: estimate || undefined,
-      specialInstructions: specialInstructions.trim() || undefined,
-    });
-
-    setSubmitting(false);
-    if (!result.success) {
-      setError(result.error || "Could not submit your quote request.");
+    if (!needByDate || !autoTimeline) {
+      setError("Choose a need-by date before confirming.");
+      setStep("timeline");
       return;
     }
-    setDone(
-      result.message ||
-        "Request received. We'll confirm pricing before production.",
-    );
+
+    writeOrderRequestDraft({
+      needByDate,
+      deliverySpeed: autoTimeline.label,
+      specialInstructions: specialInstructions.trim() || undefined,
+      source: "quote",
+    });
+
+    let firstImage: string | undefined;
+    for (const product of selectedProducts) {
+      const cfg = configs[product.id];
+      const method = methods.find((m) => m.id === cfg.methodId);
+      const variants = cfg.selectedColors
+        .map((colorName) => {
+          const color = product.colors?.find((c) => c.name === colorName);
+          const sizes = Object.entries(cfg.sizeQtyByColor[colorName] || {})
+            .filter(([, qty]) => qty > 0)
+            .map(([size, qty]) => ({ size, qty }));
+          if (!sizes.length) return null;
+          return {
+            colorName,
+            hex: color?.hex,
+            imageUrl:
+              color?.imageUrl || product.imageThumbUrl || product.imageUrl,
+            sizes,
+          };
+        })
+        .filter(Boolean) as Array<{
+        colorName: string;
+        hex?: string;
+        imageUrl?: string;
+        sizes: Array<{ size: string; qty: number }>;
+      }>;
+
+      if (!variants.length) continue;
+
+      const preview =
+        product.colors?.find((c) => c.name === cfg.previewColor) ||
+        product.colors?.find((c) => cfg.selectedColors.includes(c.name)) ||
+        product.colors?.[0];
+      const imageUrl =
+        preview?.imageUrl || product.imageThumbUrl || product.imageUrl;
+      if (!firstImage && imageUrl) firstImage = imageUrl;
+
+      addItem({
+        productId: product.id,
+        productSlug: product.slug,
+        productName: product.name,
+        brand: product.brand,
+        imageUrl,
+        basePrice: product.pricing?.basePrice,
+        currency: product.pricing?.currency || "USD",
+        variants,
+        decoration: {
+          method: method?.label || cfg.methodId,
+          locations: cfg.locations,
+          colors: 0,
+        },
+        design: {
+          hasArtwork: design.hasArtwork,
+          notes: design.notes.trim() || undefined,
+          artworkUrl: design.artworkUrl.trim() || undefined,
+        },
+      });
+    }
+
+    const count = selectedProducts.length;
+    setAddedSummary({
+      name:
+        count === 1
+          ? selectedProducts[0]?.name || "Product"
+          : `${selectedProducts[0]?.name || "Product"} + ${count - 1} more`,
+      image: firstImage,
+    });
+    setShowAddedModal(true);
   }
 
-  if (done) {
-    return (
-      <section className="bg-surface py-16 md:py-24">
-        <Container className="max-w-xl text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-accent-light text-brand-accent-dark">
-            <Check size={22} />
-          </div>
-          <h1 className="mt-4 text-2xl font-bold text-taupe">
-            Quote request submitted
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-grey-olive">
-            {done} Create an account anytime to track requests from your
-            dashboard.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button href="/account" variant="primary">
-              Go to account
-            </Button>
-            <Button href="/apparel" variant="secondary">
-              Keep browsing
-            </Button>
-          </div>
-        </Container>
-      </section>
-    );
+  function closeAddedModal() {
+    setShowAddedModal(false);
+    resetWizard();
   }
 
   return (
-    <section className="bg-surface py-10 md:py-14">
-      <Container>
+    <section className="relative overflow-hidden bg-surface">
+      <div className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
+      <div className="bg-hero-glow pointer-events-none absolute inset-0 opacity-70" />
+      <Container className="relative pt-10 pb-16 md:pt-14 md:pb-24">
         <div className="mb-8 max-w-2xl">
           <p className="text-eyebrow text-brand-accent-dark">Build a quote</p>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight text-taupe md:text-3xl">
+          <h1 className="mt-3 text-section-title text-taupe">
             Tell us what you need — we&apos;ll confirm pricing.
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-grey-olive">
-            Pick products, share your design and timeline, then send a request.
-            No payment online.
+          <p className="mt-4 text-sm leading-relaxed text-grey-olive md:text-base">
+            Pick products, share your design and need-by date, then add
+            everything to your order request. No payment online.
           </p>
         </div>
 
@@ -434,18 +463,14 @@ export function QuoteWizard({ products, methods }: Props) {
                   className="w-full rounded-xl border border-border bg-white py-2.5 pl-9 pr-3 text-sm outline-none focus:border-brand-accent"
                 />
               </label>
-              <select
+              <BrandSelect
                 value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="rounded-xl border border-border bg-white py-2.5 pl-3 pr-10 text-sm outline-none focus:border-brand-accent"
-              >
-                <option value="">All brands</option>
-                {brands.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
-                  </option>
-                ))}
-              </select>
+                onChange={setBrand}
+                options={[
+                  { value: "", label: "All brands" },
+                  ...brands.map((b) => ({ value: b, label: b })),
+                ]}
+              />
             </div>
 
             <p className="mb-4 text-sm text-grey-olive">
@@ -772,28 +797,6 @@ export function QuoteWizard({ products, methods }: Props) {
                             );
                           })}
                         </div>
-                        {activeMethod?.askInkColors && (
-                          <label className="mt-3 block max-w-[10rem] text-xs">
-                            <span className="font-medium text-taupe">
-                              Ink / thread colors
-                            </span>
-                            <input
-                              type="number"
-                              min={1}
-                              max={12}
-                              value={cfg.inkColors}
-                              onChange={(e) =>
-                                updateConfig(product.id, {
-                                  inkColors: Math.max(
-                                    1,
-                                    Number(e.target.value) || 1,
-                                  ),
-                                })
-                              }
-                              className="mt-1 w-full rounded-lg border border-border bg-surface px-2 py-1.5 text-sm outline-none focus:border-brand-accent"
-                            />
-                          </label>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -804,7 +807,7 @@ export function QuoteWizard({ products, methods }: Props) {
         )}
 
         {step === "design" && (
-          <div className="max-w-2xl rounded-2xl border border-border bg-white p-6">
+          <div className="rounded-2xl border border-border bg-white p-5 md:p-6">
             <p className="text-sm font-semibold text-taupe">
               Do you have artwork ready?
             </p>
@@ -835,98 +838,102 @@ export function QuoteWizard({ products, methods }: Props) {
             </div>
 
             {design.hasArtwork && (
-              <div className="mt-5">
-                <p className="text-sm font-medium text-taupe">Upload artwork</p>
-                <p className="mt-1 text-xs text-grey-olive">
-                  PNG, JPG, WebP, SVG, PDF, AI, or EPS — up to 10MB.
-                </p>
-                <label className="mt-3 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-[#f7f4ef] px-4 py-8 text-center transition hover:border-brand-accent/50">
-                  <Upload size={20} className="text-brand-accent-dark" />
-                  <span className="mt-2 text-sm font-medium text-taupe">
-                    {design.uploading
-                      ? "Uploading…"
-                      : design.artworkFileName
-                        ? "Replace file"
-                        : "Choose a file"}
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf,.ai,.eps,application/pdf"
-                    className="sr-only"
-                    disabled={design.uploading}
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      e.target.value = "";
-                      if (!file) return;
-                      setError(null);
-                      setDesign((prev) => ({ ...prev, uploading: true }));
-                      const result = await uploadArtworkFile(file);
-                      if (!result.ok || !result.url) {
-                        setDesign((prev) => ({ ...prev, uploading: false }));
-                        setError(result.error || "Upload failed.");
-                        return;
-                      }
-                      setDesign((prev) => ({
-                        ...prev,
-                        uploading: false,
-                        artworkUrl: result.url || "",
-                        artworkFileName: result.fileName || file.name,
-                      }));
-                    }}
-                  />
-                </label>
+              <div className="mt-5 space-y-5">
+                <PastDesignPicker
+                  selectedUrl={design.artworkUrl}
+                  onSelect={(past) =>
+                    setDesign((prev) => ({
+                      ...prev,
+                      artworkUrl: past.url,
+                      artworkFileName:
+                        past.productName ||
+                        past.url.split("/").pop() ||
+                        "Past design",
+                      notes: prev.notes.trim()
+                        ? prev.notes
+                        : past.notes || "",
+                    }))
+                  }
+                />
 
-                {design.artworkUrl && (
-                  <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border bg-white px-3 py-2.5">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-taupe">
-                        {design.artworkFileName || "Artwork uploaded"}
-                      </p>
-                      <a
-                        href={design.artworkUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-brand-accent-dark underline"
-                      >
-                        View file
-                      </a>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() =>
+                <div>
+                  <p className="text-sm font-medium text-taupe">
+                    Or upload new artwork
+                  </p>
+                  <p className="mt-1 text-xs text-grey-olive">
+                    PNG, JPG, WebP, SVG, PDF, AI, or EPS — up to 10MB.
+                  </p>
+                  <label className="mt-3 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-[#f7f4ef] px-4 py-8 text-center transition hover:border-brand-accent/50">
+                    <Upload size={20} className="text-brand-accent-dark" />
+                    <span className="mt-2 text-sm font-medium text-taupe">
+                      {design.uploading
+                        ? "Uploading…"
+                        : design.artworkFileName
+                          ? "Replace file"
+                          : "Choose a file"}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*,.pdf,.ai,.eps,application/pdf"
+                      className="sr-only"
+                      disabled={design.uploading}
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = "";
+                        if (!file) return;
+                        setError(null);
+                        setDesign((prev) => ({ ...prev, uploading: true }));
+                        const result = await uploadArtworkFile(file);
+                        if (!result.ok || !result.url) {
+                          setDesign((prev) => ({ ...prev, uploading: false }));
+                          setError(result.error || "Upload failed.");
+                          return;
+                        }
+                        setDesign((prev) => ({
+                          ...prev,
+                          uploading: false,
+                          artworkUrl: result.url || "",
+                          artworkFileName: result.fileName || file.name,
+                        }));
+                      }}
+                    />
+                  </label>
+
+                  {design.artworkUrl && (
+                    <ArtworkAttachmentCard
+                      url={design.artworkUrl}
+                      fileName={design.artworkFileName}
+                      onRemove={() =>
                         setDesign((prev) => ({
                           ...prev,
                           artworkUrl: "",
                           artworkFileName: "",
                         }))
                       }
-                      className="shrink-0 rounded-md p-1.5 text-grey-olive hover:bg-surface hover:text-taupe"
-                      aria-label="Remove artwork"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
+                      className="mt-3"
+                    />
+                  )}
 
-                <label className="mt-4 block text-sm">
-                  <span className="font-medium text-taupe">
-                    Or paste a link (optional)
-                  </span>
-                  <input
-                    value={
-                      design.artworkFileName ? "" : design.artworkUrl
-                    }
-                    onChange={(e) =>
-                      setDesign((prev) => ({
-                        ...prev,
-                        artworkUrl: e.target.value,
-                        artworkFileName: "",
-                      }))
-                    }
-                    placeholder="Google Drive, Dropbox, or image URL"
-                    className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                  />
-                </label>
+                  <label className="mt-4 block text-sm">
+                    <span className="font-medium text-taupe">
+                      Or paste a link (optional)
+                    </span>
+                    <input
+                      value={
+                        design.artworkFileName ? "" : design.artworkUrl
+                      }
+                      onChange={(e) =>
+                        setDesign((prev) => ({
+                          ...prev,
+                          artworkUrl: e.target.value,
+                          artworkFileName: "",
+                        }))
+                      }
+                      placeholder="Google Drive, Dropbox, or image URL"
+                      className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
+                    />
+                  </label>
+                </div>
               </div>
             )}
 
@@ -946,118 +953,167 @@ export function QuoteWizard({ products, methods }: Props) {
         )}
 
         {step === "timeline" && (
-          <div className="max-w-2xl space-y-4">
-            <div className="grid gap-3 sm:grid-cols-3">
-              {DELIVERY.map((option) => {
-                const on = deliverySpeed === option.id;
+          <div className="rounded-2xl border border-border bg-white p-5 md:p-6">
+            <p className="text-sm font-semibold text-taupe">
+              When do you need this?
+            </p>
+            <p className="mt-1 text-sm text-grey-olive">
+              Pick a need-by date and we&apos;ll set Rush, Standard, or Flexible
+              automatically — so the timeline always matches your deadline.
+            </p>
+
+            <label className="mt-5 block max-w-sm text-sm">
+              <span className="font-medium text-taupe">Need-by date *</span>
+              <input
+                type="date"
+                required
+                min={earliestNeedBy}
+                value={needByDate}
+                onChange={(e) => {
+                  setNeedByDate(e.target.value);
+                  setError(null);
+                }}
+                className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none transition focus:border-brand-accent focus:bg-white"
+              />
+            </label>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {TIMELINE_OPTIONS.map((option) => {
+                const on = autoTimeline?.id === option.id;
                 return (
-                  <button
+                  <div
                     key={option.id}
-                    type="button"
-                    onClick={() => setDeliverySpeed(option.id)}
                     className={cn(
-                      "rounded-2xl border p-4 text-left transition",
+                      "rounded-2xl border p-4 transition",
                       on
-                        ? "border-brand-accent bg-white ring-2 ring-brand-accent/25"
-                        : "border-border bg-white hover:border-brand-accent/40",
+                        ? "border-brand-accent bg-brand-accent-light/50 ring-2 ring-brand-accent/25"
+                        : "border-border bg-surface opacity-55",
                     )}
                   >
-                    <p className="font-semibold text-taupe">{option.label}</p>
-                    <p className="mt-1 text-xs text-grey-olive">{option.hint}</p>
-                  </button>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-semibold text-taupe">{option.label}</p>
+                      {on ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-accent-dark">
+                          <Check size={10} strokeWidth={3} />
+                          Selected
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-1 text-xs leading-relaxed text-grey-olive">
+                      {option.hint}
+                    </p>
+                  </div>
                 );
               })}
             </div>
-            <label className="block max-w-sm text-sm">
+
+            {needByDate && autoTimeline ? (
+              <p className="mt-4 rounded-xl border border-brand-accent/25 bg-brand-accent-light/40 px-3.5 py-2.5 text-xs text-taupe">
+                Based on your need-by date, this request is set to{" "}
+                <span className="font-semibold">{autoTimeline.label}</span>.
+              </p>
+            ) : (
+              <p className="mt-4 text-xs text-grey-olive">
+                Choose a date at least one day out to see the matching timeline.
+              </p>
+            )}
+
+            <label className="mt-5 block text-sm">
               <span className="font-medium text-taupe">
-                Need-by date (optional)
+                Notes for the timeline (optional)
               </span>
-              <input
-                type="date"
-                value={needByDate}
-                onChange={(e) => setNeedByDate(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-border bg-white px-3 py-2.5 outline-none focus:border-brand-accent"
+              <textarea
+                value={specialInstructions}
+                onChange={(e) => setSpecialInstructions(e.target.value)}
+                rows={3}
+                placeholder="Event date, shipping constraints, anything we should know…"
+                className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
               />
             </label>
           </div>
         )}
 
-        {step === "contact" && (
-          <form
-            id="quote-submit"
-            onSubmit={onSubmit}
-            className="max-w-2xl space-y-4 rounded-2xl border border-border bg-white p-6"
-          >
-            <p className="text-sm text-grey-olive">
-              Almost done — where should we send your quote?
+        {step === "confirm" && (
+          <div className="rounded-2xl border border-border bg-white p-5 md:p-6">
+            <p className="text-sm font-semibold text-taupe">
+              Confirm your order request
             </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="text-sm sm:col-span-2">
-                <span className="font-medium text-taupe">Name</span>
-                <input
-                  required
-                  value={contact.name}
-                  onChange={(e) =>
-                    setContact((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                  className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                />
-              </label>
-              <label className="text-sm sm:col-span-2">
-                <span className="font-medium text-taupe">Email</span>
-                <input
-                  type="email"
-                  required
-                  value={contact.email}
-                  onChange={(e) =>
-                    setContact((prev) => ({ ...prev, email: e.target.value }))
-                  }
-                  className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                />
-              </label>
-              <label className="text-sm">
-                <span className="font-medium text-taupe">Company</span>
-                <input
-                  value={contact.company}
-                  onChange={(e) =>
-                    setContact((prev) => ({
-                      ...prev,
-                      company: e.target.value,
-                    }))
-                  }
-                  className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                />
-              </label>
-              <label className="text-sm">
-                <span className="font-medium text-taupe">Phone</span>
-                <input
-                  value={contact.phone}
-                  onChange={(e) =>
-                    setContact((prev) => ({ ...prev, phone: e.target.value }))
-                  }
-                  className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                />
-              </label>
-              <label className="text-sm sm:col-span-2">
-                <span className="font-medium text-taupe">
-                  Anything else we should know?
-                </span>
-                <textarea
-                  value={specialInstructions}
-                  onChange={(e) => setSpecialInstructions(e.target.value)}
-                  rows={3}
-                  className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3 py-2.5 outline-none focus:border-brand-accent"
-                />
-              </label>
+            <p className="mt-1 text-sm text-grey-olive">
+              Review everything below, then add it to your order request. You
+              can still adjust shipping and contact details before you submit.
+            </p>
+
+            <div className="mt-6 space-y-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-accent-dark">
+                  Products
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {selectedProducts.map((product) => {
+                    const cfg = configs[product.id];
+                    const qty = cfg ? configQty(cfg) : 0;
+                    const method = methods.find((m) => m.id === cfg?.methodId);
+                    return (
+                      <li
+                        key={product.id}
+                        className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-border bg-surface px-3.5 py-3"
+                      >
+                        <div>
+                          <p className="text-sm font-semibold text-taupe">
+                            {product.name}
+                          </p>
+                          <p className="mt-0.5 text-xs text-grey-olive">
+                            {cfg?.selectedColors.join(", ") || "—"}
+                            {method ? ` · ${method.label}` : ""}
+                            {cfg?.locations?.length
+                              ? ` · ${cfg.locations.join(", ")}`
+                              : ""}
+                          </p>
+                        </div>
+                        <p className="text-sm font-medium text-taupe">
+                          {qty} pcs
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-border bg-surface px-3.5 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-accent-dark">
+                    Design
+                  </p>
+                  <p className="mt-1.5 text-sm text-taupe">
+                    {design.hasArtwork
+                      ? design.artworkUrl
+                        ? "Artwork attached"
+                        : "Artwork ready / to follow"
+                      : "Needs design help"}
+                  </p>
+                  {design.notes ? (
+                    <p className="mt-1 text-xs text-grey-olive line-clamp-3">
+                      {design.notes}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="rounded-xl border border-border bg-surface px-3.5 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-accent-dark">
+                    Timeline
+                  </p>
+                  <p className="mt-1.5 text-sm text-taupe">
+                    {autoTimeline?.label || "—"}
+                    {needByDate ? ` · need by ${needByDate}` : ""}
+                  </p>
+                  {specialInstructions ? (
+                    <p className="mt-1 text-xs text-grey-olive line-clamp-3">
+                      {specialInstructions}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-grey-olive">
-              After you submit, you can{" "}
-              <Link href="/account" className="font-medium text-brand-accent-dark underline">
-                create an account
-              </Link>{" "}
-              with this email to track the request.
-            </p>
-          </form>
+          </div>
         )}
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
@@ -1080,14 +1136,14 @@ export function QuoteWizard({ products, methods }: Props) {
             </button>
           )}
 
-          {step === "contact" ? (
+          {step === "confirm" ? (
             <button
-              type="submit"
-              form="quote-submit"
-              disabled={submitting}
+              type="button"
+              onClick={handleAddToOrderRequest}
+              disabled={design.uploading}
               className="inline-flex items-center gap-2 rounded-xl bg-taupe px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
             >
-              {submitting ? "Submitting…" : "Submit quote request"}
+              Add to order request
               <ArrowRight size={16} />
             </button>
           ) : (
@@ -1103,6 +1159,15 @@ export function QuoteWizard({ products, methods }: Props) {
           )}
         </div>
       </Container>
+
+      <AddedToOrderModal
+        open={showAddedModal}
+        productName={addedSummary?.name || "Your quote"}
+        productImage={addedSummary?.image}
+        description="Your quote selections are in the order request. Review shipping and contact there, then submit when you are ready."
+        keepBrowsingLabel="Build another quote"
+        onClose={closeAddedModal}
+      />
     </section>
   );
 }

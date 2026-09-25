@@ -11,6 +11,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/home/CTA";
 import { AppIcon } from "@/lib/icons";
+import { cn } from "@/lib/utils";
 
 type ServiceDetailContentProps = {
   service: Service;
@@ -21,28 +22,12 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
 
   return (
     <>
-      <section className="relative overflow-hidden">
-        <div className="relative min-h-[68vh] w-full sm:min-h-[62vh] lg:min-h-[560px] xl:min-h-[600px]">
-          <Image
-            src={service.heroImage.src}
-            alt={service.heroImage.alt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-black/15"
-            aria-hidden
-          />
-          <div
-            className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent"
-            aria-hidden
-          />
-
-          <Container className="relative flex min-h-[68vh] flex-col justify-end pb-12 pt-28 sm:min-h-[62vh] sm:pb-14 lg:min-h-[560px] lg:pb-16 xl:min-h-[600px]">
-            <div className="max-w-2xl">
+      <section className="relative overflow-hidden bg-surface">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
+        <div className="bg-hero-glow pointer-events-none absolute inset-0 opacity-80" />
+        <Container className="relative py-16 md:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-6 xl:col-span-5">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -51,21 +36,23 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
               >
                 <Link
                   href="/services"
-                  className="text-eyebrow text-brand-gold transition-colors hover:text-brand-gold/80"
+                  className="text-eyebrow text-brand-accent-dark transition-colors hover:text-taupe"
                 >
                   Services
                 </Link>
-                <span className="text-xs text-white/40" aria-hidden>
+                <span className="text-xs text-grey-olive/50" aria-hidden>
                   /
                 </span>
-                <span className="text-eyebrow text-white/70">{service.title}</span>
+                <span className="text-eyebrow text-grey-olive">
+                  {service.title}
+                </span>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.05 }}
-                className="text-section-title mt-3 text-white drop-shadow-sm md:text-[clamp(2rem,4vw,3.25rem)]"
+                className="text-section-title mt-3 text-taupe md:text-[clamp(2rem,4vw,3.25rem)]"
               >
                 {service.title}
               </motion.h1>
@@ -74,7 +61,7 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="mt-4 max-w-lg text-sm leading-relaxed text-white/85 md:text-base"
+                className="mt-4 max-w-lg text-sm leading-relaxed text-grey-olive md:text-base"
               >
                 {service.pageIntro}
               </motion.p>
@@ -86,26 +73,61 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
                 className="mt-7 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
               >
                 <Button
-                  href="/contact"
-                  variant="secondary"
-                  size="lg"
-                  className="w-full shadow-md sm:w-auto"
-                >
-                  Request a quote
-                  <ArrowRight size={16} />
-                </Button>
-                <Button
                   href="/services"
+                  variant="outline"
                   size="lg"
-                  className="w-full border border-white/35 bg-white/15 text-white backdrop-blur-sm hover:border-white/50 hover:bg-white/25 sm:w-auto"
+                  className="w-full sm:w-auto"
                 >
                   <ArrowLeft size={16} />
                   All services
                 </Button>
+                <Button
+                  href="/contact"
+                  variant="secondary"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Request a quote
+                  <ArrowRight size={16} />
+                </Button>
               </motion.div>
             </div>
-          </Container>
-        </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.12 }}
+              className="lg:col-span-6 xl:col-span-7"
+            >
+              <div
+                className={cn(
+                  "relative ml-auto w-full overflow-hidden rounded-2xl bg-white",
+                  service.id === "embroidery"
+                    ? "aspect-[3/4] max-w-xs sm:max-w-sm"
+                    : service.id === "stores"
+                      ? "aspect-[16/11] max-w-md lg:max-w-lg"
+                      : "aspect-[16/11] max-w-md sm:max-w-lg",
+                )}
+              >
+                <Image
+                  src={service.heroImage.src}
+                  alt={service.heroImage.alt}
+                  fill
+                  priority
+                  quality={100}
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 560px, 512px"
+                  className={
+                    service.id === "embroidery"
+                      ? "object-cover object-[center_70%]"
+                      : service.id === "stores"
+                        ? "object-cover object-top"
+                        : "object-cover object-center"
+                  }
+                />
+              </div>
+            </motion.div>
+          </div>
+        </Container>
       </section>
 
       <section className="py-16 md:py-24">
@@ -180,8 +202,13 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
                     src={sample.src}
                     alt={sample.alt}
                     fill
-                    sizes="(max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 280px"
+                    quality={100}
+                    className={
+                      sample.imageClassName
+                        ? `${sample.imageClassName} transition-transform duration-500 group-hover:scale-[1.02]`
+                        : "object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    }
                   />
                 </div>
                 <figcaption className="mt-3.5">
@@ -246,9 +273,10 @@ export function ServiceDetailContent({ service }: ServiceDetailContentProps) {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/home/when-you-need.jpg"
+            src="/images/home/about-marquee-screenprint.jpg"
             alt="Production in progress"
             fill
+            quality={90}
             sizes="100vw"
             className="object-cover"
           />

@@ -20,14 +20,15 @@ export function AboutPageContent() {
     <>
       <AboutHero />
 
-      <section className="border-b border-border bg-surface py-12 md:py-16">
+      {/* White band — black callout lives here, not on the cream grid */}
+      <section className="bg-white py-12 md:py-16">
         <Container>
           <motion.div
             initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.4 }}
-            className="rounded-3xl bg-taupe px-6 py-8 sm:px-8 md:px-10 md:py-10"
+            className="rounded-2xl bg-taupe px-6 py-8 sm:px-8 md:px-10 md:py-10"
           >
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
               {aboutHighlights.map((item, index) => (
@@ -50,7 +51,7 @@ export function AboutPageContent() {
         </Container>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="border-t border-border bg-white py-16 md:py-24">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-6">
@@ -81,46 +82,62 @@ export function AboutPageContent() {
             </div>
 
             <div className="lg:col-span-6">
-              <div className="relative h-64 overflow-hidden rounded-2xl sm:h-80 md:h-[22rem]">
-                <Image
-                  src="/images/home/what-you-need.jpg"
-                  alt="Reviewing product and decoration options together"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
+              <div className="relative mx-auto max-w-xl pb-10 pr-8 sm:pb-12 sm:pr-12 md:max-w-none md:pb-14 md:pr-14">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border sm:aspect-[16/11]">
+                  <Image
+                    src="/images/home/about-facility.jpg"
+                    alt="Plus One Promo facility and team gathered outside the building"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    quality={90}
+                    className="object-cover object-center"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 z-10 w-[42%] max-w-[11.5rem] overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_32px_rgba(0,0,0,0.12)] sm:-bottom-3 sm:-right-3 sm:max-w-[13.5rem] md:-bottom-4 md:-right-4 md:max-w-[15rem]">
+                  <div className="relative aspect-[4/5] w-full">
+                    <Image
+                      src="/images/home/about-team-detail.jpg"
+                      alt="Plus One Promo team members at an event"
+                      fill
+                      sizes="(max-width: 768px) 320px, 440px"
+                      quality={90}
+                      className="object-cover object-[center_20%]"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </Container>
       </section>
 
-      <section className="border-t border-border bg-surface py-16 md:py-24">
-        <Container>
+      <section className="relative overflow-hidden border-t border-border bg-surface py-16 md:py-24">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-30" />
+        <Container className="relative">
           <motion.figure
             initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45 }}
-            className="rounded-3xl bg-taupe px-6 py-10 sm:px-10 sm:py-12 md:px-14 md:py-14"
+            className="rounded-2xl border border-border bg-white px-6 py-10 sm:px-10 sm:py-12 md:px-14 md:py-14"
           >
             <span
-              className="block text-5xl font-bold leading-none text-brand-gold"
+              className="block text-5xl font-bold leading-none text-brand-accent-dark"
               aria-hidden
             >
               &ldquo;
             </span>
-            <blockquote className="mt-4 max-w-3xl text-xl font-semibold leading-snug tracking-tight text-white sm:text-2xl md:text-[1.75rem] md:leading-snug">
+            <blockquote className="mt-4 max-w-3xl text-xl font-semibold leading-snug tracking-tight text-taupe sm:text-2xl md:text-[1.75rem] md:leading-snug">
               {siteConfig.mission}&rdquo;
             </blockquote>
-            <figcaption className="mt-8 border-t border-white/10 pt-6 text-sm text-white/60">
+            <figcaption className="mt-8 border-t border-border pt-6 text-sm text-grey-olive">
               Our mission at {siteConfig.name}
             </figcaption>
           </motion.figure>
         </Container>
       </section>
 
-      <section className="border-t border-border py-16 md:py-24">
+      <section className="border-t border-border bg-white py-16 md:py-24">
         <Container>
           <div className="mb-10 max-w-xl md:mb-12">
             <p className="text-eyebrow text-brand-accent-dark">Our values</p>
@@ -141,7 +158,7 @@ export function AboutPageContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.35, delay: index * 0.04 }}
-                className="rounded-2xl border border-border bg-white p-5 transition-colors hover:border-brand-accent/40 hover:bg-brand-accent-light/30 md:p-6"
+                className="rounded-2xl border border-border bg-surface p-5 md:p-6"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
@@ -165,8 +182,9 @@ export function AboutPageContent() {
         </Container>
       </section>
 
-      <section className="border-t border-border bg-surface py-16 md:py-24">
-        <Container>
+      <section className="relative overflow-hidden border-t border-border bg-surface py-16 md:py-24">
+        <div className="bg-grid pointer-events-none absolute inset-0 opacity-30" />
+        <Container className="relative">
           <div className="mb-10 max-w-xl md:mb-12">
             <p className="text-eyebrow text-brand-accent-dark">Why choose us</p>
             <h2 className="mt-3 text-section-title text-taupe">
@@ -178,66 +196,27 @@ export function AboutPageContent() {
             </p>
           </div>
 
-          <motion.div
-            initial={false}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.4 }}
-            className="rounded-3xl bg-taupe px-6 py-10 sm:px-8 md:px-10 md:py-12"
-          >
-            <div className="grid gap-8 sm:grid-cols-2 md:gap-10">
-              {whyPlusOne.map((item) => (
-                <div key={item.title} className="flex gap-4">
-                  <AppIcon
-                    name={item.icon}
-                    size={20}
-                    className="mt-0.5 shrink-0 text-brand-gold"
-                  />
-                  <div>
-                    <h3 className="text-base font-semibold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/60">
-                      {item.description}
-                    </p>
-                  </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {whyPlusOne.map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={false}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.35, delay: index * 0.04 }}
+                className="rounded-2xl border border-border bg-white p-5 md:p-6"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-accent-light text-brand-accent-dark">
+                  <AppIcon name={item.icon} size={18} />
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        </Container>
-      </section>
-
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/home/when-you-need.jpg"
-            alt="Production in progress"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-taupe/75" />
-        </div>
-        <Container className="relative py-16 md:py-20">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-eyebrow text-brand-accent">Ready when you are</p>
-            <h2 className="mt-3 text-section-title text-white">
-              Let&apos;s get quality goods in your hands.
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-silver md:text-base">
-              Tell us what you need — we&apos;ll come back with options and a
-              clear quote before production starts.
-            </p>
-            <Button
-              href="/contact"
-              variant="secondary"
-              size="lg"
-              className="mt-8"
-            >
-              Request a quote
-              <ArrowRight size={16} />
-            </Button>
+                <h3 className="mt-4 text-base font-semibold text-taupe">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-grey-olive">
+                  {item.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </Container>
       </section>

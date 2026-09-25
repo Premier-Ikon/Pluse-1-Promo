@@ -29,7 +29,7 @@ export function Hero() {
           alt="A team reviewing custom apparel, drinkware, and gifts together in a bright studio"
           fill
           priority
-          unoptimized
+          quality={90}
           sizes="100vw"
           className="object-cover object-center"
         />

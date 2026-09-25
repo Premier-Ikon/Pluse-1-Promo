@@ -60,7 +60,7 @@ export default function RootLayout({
         <CustomerAuthProvider>
           <OrderRequestCartProvider>
             <Header />
-            <main className="flex-1 overflow-x-hidden">{children}</main>
+            <main className="flex flex-1 flex-col overflow-x-hidden">{children}</main>
             <Footer />
           </OrderRequestCartProvider>
         </CustomerAuthProvider>

@@ -18,7 +18,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Gildan",
     category: "Apparel",
     priceFrom: 8.5,
-    image: "/images/home/apparel.jpg",
+    image: "/images/home/work-embroidered-polo.jpg",
     alt: "Heavy cotton t-shirt",
   },
   {
@@ -28,7 +28,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Independent Trading",
     category: "Apparel",
     priceFrom: 28,
-    image: "/images/home/hoodie.jpg",
+    image: "/images/home/work-embroidered-hoodie.jpg",
     alt: "Fleece pullover hoodie",
   },
   {
@@ -38,7 +38,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Richardson",
     category: "Headwear",
     priceFrom: 12,
-    image: "/images/home/caps.jpg",
+    image: "/images/home/work-embroidered-caps.jpg",
     alt: "Structured baseball cap",
   },
   {
@@ -48,7 +48,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Promo Essentials",
     category: "Drinkware",
     priceFrom: 14,
-    image: "/images/home/drinkware.jpg",
+    image: "/images/home/merchandise-drinkware-set.jpg",
     alt: "Insulated water bottle",
   },
   {
@@ -58,7 +58,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Promo Essentials",
     category: "Bags",
     priceFrom: 9,
-    image: "/images/home/tote.jpg",
+    image: "/images/home/merchandise-totes.jpg",
     alt: "Canvas tote bag",
   },
   {
@@ -68,7 +68,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Plus One",
     category: "Gifting",
     priceFrom: 45,
-    image: "/images/home/gifts.jpg",
+    image: "/images/home/work-welcome-kit.jpg",
     alt: "Custom welcome gift kit",
   },
   {
@@ -78,7 +78,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Plus One Print",
     category: "Print",
     priceFrom: 0.35,
-    image: "/images/home/print.jpg",
+    image: "/images/home/print-mailers.jpg",
     alt: "Premium business cards",
   },
   {
@@ -88,7 +88,7 @@ export const featuredProducts: FeaturedProduct[] = [
     brand: "Port Authority",
     category: "Embroidery",
     priceFrom: 22,
-    image: "/images/home/what-you-need.jpg",
+    image: "/images/home/work-embroidered-polo.jpg",
     alt: "Embroidered performance polo",
   },
 ];
