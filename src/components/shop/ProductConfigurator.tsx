@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Check, Search, Shirt, X } from "lucide-react";
+import { Search, Shirt, X } from "lucide-react";
 import type { CatalogProduct, DecorationMethod } from "@/lib/catalog";
-import { formatDisplayPrice } from "@/lib/catalog";
+import { formatDisplayPrice, uploadArtworkFile } from "@/lib/catalog";
 import { useOrderRequestCart } from "@/components/order/OrderRequestCartProvider";
+import { PastDesignPicker } from "@/components/quote/PastDesignPicker";
+import { AddedToOrderModal } from "@/components/shop/AddedToOrderModal";
 import { ProductDescription } from "@/components/shop/ProductDescription";
+import { ArtworkAttachmentCard } from "@/components/ui/ArtworkAttachmentCard";
 import { ButtonNative } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -84,10 +86,16 @@ export function ProductConfigurator({
     () => availableMethods[0]?.id || "",
   );
   const [locations, setLocations] = useState<string[]>([]);
-  const [inkColors, setInkColors] = useState(1);
   const [hasArtwork, setHasArtwork] = useState(true);
   const [designNotes, setDesignNotes] = useState("");
-  const [added, setAdded] = useState(false);
+  const [artworkUrl, setArtworkUrl] = useState("");
+  const [artworkFileName, setArtworkFileName] = useState("");
+  const [uploadingArtwork, setUploadingArtwork] = useState(false);
+  const [showAddedModal, setShowAddedModal] = useState(false);
+  const [addedSnapshot, setAddedSnapshot] = useState<{
+    name: string;
+    image?: string;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const activeMethod =
@@ -130,6 +138,33 @@ export function ProductConfigurator({
       return sum + Object.values(sizes).reduce((a, b) => a + b, 0);
     }, 0);
   }, [selectedColors, sizeQtyByColor]);
+
+  function resetConfigurator() {
+    const initialColor =
+      product.showcaseColor || product.colors[0]?.name || "";
+    setSelectedColors(initialColor ? [initialColor] : []);
+    setPreviewColor(initialColor);
+    setColorQuery("");
+    setSizeQtyByColor({});
+    setDecorationMethod(availableMethods[0]?.id || "");
+    setLocations(
+      availableMethods[0]?.locations?.[0]
+        ? [availableMethods[0].locations[0]]
+        : [],
+    );
+    setHasArtwork(true);
+    setDesignNotes("");
+    setArtworkUrl("");
+    setArtworkFileName("");
+    setUploadingArtwork(false);
+    setError(null);
+  }
+
+  function closeAddedModal() {
+    setShowAddedModal(false);
+    setAddedSnapshot(null);
+    resetConfigurator();
+  }
 
   function toggleColor(name: string) {
     setPreviewColor(name);
@@ -224,16 +259,24 @@ export function ProductConfigurator({
       decoration: {
         method: activeMethod?.label || decorationMethod,
         locations,
-        colors: inkColors,
+        colors: 0,
       },
       design: {
         hasArtwork,
         notes: designNotes.trim() || undefined,
+        artworkUrl: artworkUrl.trim() || undefined,
       },
     });
 
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 4000);
+    setAddedSnapshot({
+      name: product.name,
+      image:
+        variants[0]?.imageUrl ||
+        previewImage ||
+        product.imageThumbUrl ||
+        product.imageUrl,
+    });
+    setShowAddedModal(true);
   }
 
   return (
@@ -515,21 +558,6 @@ export function ProductConfigurator({
                   </div>
                 </>
               )}
-              {activeMethod?.askInkColors && (
-                <label className="mt-4 block text-xs text-grey-olive">
-                  Number of print colors
-                  <input
-                    type="number"
-                    min={1}
-                    max={8}
-                    value={inkColors}
-                    onChange={(e) =>
-                      setInkColors(Number(e.target.value) || 1)
-                    }
-                    className="mt-1 w-24 rounded-lg border border-border bg-white px-3 py-2 text-sm text-taupe outline-none focus:border-brand-accent"
-                  />
-                </label>
-              )}
             </>
           )}
         </div>
@@ -557,6 +585,77 @@ export function ProductConfigurator({
               </button>
             ))}
           </div>
+
+          {hasArtwork && (
+            <div className="mt-4 space-y-4">
+              <PastDesignPicker
+                selectedUrl={artworkUrl}
+                onSelect={(past) => {
+                  setArtworkUrl(past.url);
+                  setArtworkFileName(
+                    past.productName ||
+                      past.url.split("/").pop() ||
+                      "Past design",
+                  );
+                  if (!designNotes.trim() && past.notes) {
+                    setDesignNotes(past.notes);
+                  }
+                }}
+              />
+
+              <div>
+                <p className="text-xs font-medium text-taupe">
+                  Or upload new artwork
+                </p>
+                <label className="mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-border bg-[#f7f4ef] px-3 py-6 text-center transition hover:border-brand-accent/50">
+                  <span className="text-sm font-medium text-taupe">
+                    {uploadingArtwork
+                      ? "Uploading…"
+                      : artworkFileName
+                        ? "Replace file"
+                        : "Choose a file"}
+                  </span>
+                  <span className="mt-1 text-[11px] text-grey-olive">
+                    PNG, JPG, PDF, AI, EPS — up to 10MB
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf,.ai,.eps,application/pdf"
+                    className="sr-only"
+                    disabled={uploadingArtwork}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      e.target.value = "";
+                      if (!file) return;
+                      setError(null);
+                      setUploadingArtwork(true);
+                      const result = await uploadArtworkFile(file);
+                      setUploadingArtwork(false);
+                      if (!result.ok || !result.url) {
+                        setError(result.error || "Upload failed.");
+                        return;
+                      }
+                      setArtworkUrl(result.url);
+                      setArtworkFileName(result.fileName || file.name);
+                    }}
+                  />
+                </label>
+
+                {artworkUrl && (
+                  <ArtworkAttachmentCard
+                    url={artworkUrl}
+                    fileName={artworkFileName}
+                    onRemove={() => {
+                      setArtworkUrl("");
+                      setArtworkFileName("");
+                    }}
+                    className="mt-2"
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
           <label className="mt-4 block text-xs text-grey-olive">
             Design notes (optional)
             <textarea
@@ -577,26 +676,8 @@ export function ProductConfigurator({
             className="w-full sm:w-auto"
             onClick={handleAdd}
           >
-            {added ? (
-              <>
-                <Check size={16} />
-                Added to order request
-              </>
-            ) : (
-              "Add to order request"
-            )}
+            Add to order request
           </ButtonNative>
-          {added && (
-            <p className="text-sm text-grey-olive">
-              <Link
-                href="/order-request"
-                className="font-medium text-brand-accent-dark hover:underline"
-              >
-                View your order request
-              </Link>{" "}
-              or keep browsing the shop.
-            </p>
-          )}
           {error && (
             <p className="text-sm text-red-600" role="alert">
               {error}
@@ -611,6 +692,13 @@ export function ProductConfigurator({
           <ProductDescription description={product.description} />
         </div>
       </div>
+
+      <AddedToOrderModal
+        open={showAddedModal}
+        productName={addedSnapshot?.name || product.name}
+        productImage={addedSnapshot?.image}
+        onClose={closeAddedModal}
+      />
     </div>
   );
 }

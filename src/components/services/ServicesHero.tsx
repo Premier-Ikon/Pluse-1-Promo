@@ -6,31 +6,62 @@ import { ArrowRight } from "lucide-react";
 import { siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/utils";
+
+const collage = [
+  {
+    src: "/images/home/about-marquee-screenprint.jpg",
+    alt: "Screen printing presses on the production floor",
+    className: "col-span-2 sm:col-span-7 sm:row-span-2",
+    sizes: "(max-width: 640px) 100vw, 60vw",
+  },
+  {
+    src: "/images/home/about-marquee-embroidery.jpg",
+    alt: "Multi-head embroidery machines in production",
+    className: "col-span-1 sm:col-span-5",
+    sizes: "(max-width: 640px) 50vw, 40vw",
+  },
+  {
+    src: "/images/home/about-marquee-warehouse.jpg",
+    alt: "Warehouse inventory ready for fulfillment",
+    className: "col-span-1 sm:col-span-5",
+    sizes: "(max-width: 640px) 50vw, 40vw",
+  },
+] as const;
 
 export function ServicesHero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden bg-taupe">
       <div className="relative min-h-[68vh] w-full sm:min-h-[62vh] lg:min-h-[560px] xl:min-h-[600px]">
-        <Image
-          src="/images/home/hero-lifestyle.jpg?v=1"
-          alt="Custom merchandise and print materials styled in a bright workspace"
-          fill
-          priority
-          unoptimized
-          sizes="100vw"
-          className="object-cover object-[center_35%]"
-        />
+        <div className="absolute inset-0 grid grid-cols-2 grid-rows-[1fr_7.5rem] gap-[3px] bg-taupe sm:grid-cols-12 sm:grid-rows-2">
+          {collage.map((panel) => (
+            <div
+              key={panel.src}
+              className={cn("relative min-h-0 overflow-hidden", panel.className)}
+            >
+              <Image
+                src={panel.src}
+                alt={panel.alt}
+                fill
+                priority
+                quality={90}
+                sizes={panel.sizes}
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
 
         <div
-          className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-black/15"
+          className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-transparent"
           aria-hidden
         />
 
-        <Container className="relative flex min-h-[68vh] flex-col justify-end pb-12 pt-28 sm:min-h-[62vh] sm:pb-14 lg:min-h-[560px] lg:pb-16 xl:min-h-[600px]">
+        <Container className="relative flex min-h-[68vh] flex-col justify-end pb-36 pt-28 sm:min-h-[62vh] sm:pb-14 lg:min-h-[560px] lg:pb-16 xl:min-h-[600px]">
           <div className="max-w-2xl">
             <motion.p
               initial={{ opacity: 0, y: 10 }}

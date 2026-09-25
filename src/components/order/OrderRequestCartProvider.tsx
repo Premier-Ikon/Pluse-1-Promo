@@ -21,7 +21,9 @@ type OrderRequestCartContextValue = {
   items: OrderRequestCartItem[];
   totalQty: number;
   itemCount: number;
+  ready: boolean;
   addItem: (item: Omit<OrderRequestCartItem, "id">) => void;
+  replaceAll: (items: Omit<OrderRequestCartItem, "id">[]) => void;
   removeItem: (id: string) => void;
   clear: () => void;
 };
@@ -60,6 +62,15 @@ export function OrderRequestCartProvider({ children }: { children: ReactNode }) 
     [persist],
   );
 
+  const replaceAll = useCallback(
+    (nextItems: Omit<OrderRequestCartItem, "id">[]) => {
+      persist(
+        nextItems.map((item) => ({ ...item, id: createCartItemId() })),
+      );
+    },
+    [persist],
+  );
+
   const removeItem = useCallback(
     (id: string) => {
       persist(readOrderRequestCart().filter((item) => item.id !== id));
@@ -76,11 +87,13 @@ export function OrderRequestCartProvider({ children }: { children: ReactNode }) 
       items: ready ? items : [],
       totalQty: ready ? cartTotalQty(items) : 0,
       itemCount: ready ? items.length : 0,
+      ready,
       addItem,
+      replaceAll,
       removeItem,
       clear,
     }),
-    [ready, items, addItem, removeItem, clear],
+    [ready, items, addItem, replaceAll, removeItem, clear],
   );
 
   return (

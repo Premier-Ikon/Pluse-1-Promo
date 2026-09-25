@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { processSteps } from "@/data/site";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -41,24 +42,35 @@ export function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.35, delay: index * 0.05 }}
-              className="group flex h-full flex-col rounded-2xl border border-border bg-white p-5 transition-colors hover:border-brand-accent/40 hover:bg-brand-accent-light/30 md:p-6"
             >
-              <div className="flex items-start justify-between gap-3">
-                <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
-                  {step.step}
+              <Link
+                href="/process"
+                className="group flex h-full flex-col rounded-2xl border border-border bg-white p-5 transition-colors hover:border-brand-accent/40 hover:bg-brand-accent-light/30 md:p-6"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
+                    {step.step}
+                  </span>
+                  <AppIcon
+                    name={step.icon}
+                    size={18}
+                    className="text-taupe/50 transition-colors group-hover:text-brand-accent-dark"
+                  />
+                </div>
+                <h3 className="mt-5 text-base font-semibold tracking-tight text-taupe md:text-lg">
+                  {step.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-grey-olive">
+                  {step.description}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-taupe">
+                  See the process
+                  <ArrowUpRight
+                    size={15}
+                    className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
                 </span>
-                <AppIcon
-                  name={step.icon}
-                  size={18}
-                  className="text-taupe/50 transition-colors group-hover:text-brand-accent-dark"
-                />
-              </div>
-              <h3 className="mt-5 text-base font-semibold tracking-tight text-taupe md:text-lg">
-                {step.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-grey-olive">
-                {step.description}
-              </p>
+              </Link>
             </motion.div>
           ))}
         </div>

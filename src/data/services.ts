@@ -4,6 +4,7 @@ export type ServiceWorkSample = {
   src: string;
   alt: string;
   caption: string;
+  imageClassName?: string;
 };
 
 export type Service = {
@@ -46,28 +47,28 @@ export const services: Service[] = [
       "Ongoing merch refreshes",
     ],
     heroImage: {
-      src: "/images/home/hoodie.jpg",
-      alt: "Custom hoodie ready for decoration",
+      src: "/images/home/work-team-apparel.jpg",
+      alt: "Team wearing custom branded tees and caps",
     },
     work: [
       {
-        src: "/images/home/apparel.jpg",
-        alt: "Custom apparel layout",
+        src: "/images/home/work-team-apparel.jpg",
+        alt: "Custom branded team apparel",
         caption: "Team apparel",
       },
       {
-        src: "/images/home/drinkware.jpg",
-        alt: "Custom drinkware",
+        src: "/images/home/merchandise-drinkware-set.jpg",
+        alt: "Custom branded tumblers and growler",
         caption: "Everyday drinkware",
       },
       {
-        src: "/images/home/tote.jpg",
-        alt: "Custom tote bag",
+        src: "/images/home/merchandise-totes.jpg",
+        alt: "Custom printed tote bags on a display rack",
         caption: "Bags & totes",
       },
       {
-        src: "/images/home/hoodie.jpg",
-        alt: "Hoodie flat lay",
+        src: "/images/home/merchandise-hoodie.jpg",
+        alt: "Custom hoodie worn on site",
         caption: "Seasonal outerwear",
       },
     ],
@@ -97,28 +98,28 @@ export const services: Service[] = [
       "Jackets and outerwear decoration",
     ],
     heroImage: {
-      src: "/images/home/caps.jpg",
-      alt: "Embroidered caps ready for decoration",
+      src: "/images/home/embroidery-caps.jpg",
+      alt: "Custom caps being embroidered on a Tajima machine",
     },
     work: [
       {
-        src: "/images/home/caps.jpg",
-        alt: "Structured caps",
+        src: "/images/home/embroidery-caps.jpg",
+        alt: "Custom caps on the embroidery machine",
         caption: "Caps & headwear",
       },
       {
-        src: "/images/home/apparel.jpg",
-        alt: "Polos and workwear",
+        src: "/images/home/work-embroidered-polo.jpg",
+        alt: "Polo with embroidered chest mark",
         caption: "Polos & workwear",
       },
       {
-        src: "/images/home/hoodie.jpg",
-        alt: "Embroidered outerwear",
+        src: "/images/home/work-embroidered-hoodie.jpg",
+        alt: "Hoodie with embroidered back emblem",
         caption: "Jackets & hoodies",
       },
       {
-        src: "/images/home/what-you-need.jpg",
-        alt: "Production detail",
+        src: "/images/home/work-embroidery-detail.jpg",
+        alt: "Embroidery needle stitching a gold emblem",
         caption: "Production detail",
       },
     ],
@@ -148,28 +149,28 @@ export const services: Service[] = [
       "Ongoing print replenishment",
     ],
     heroImage: {
-      src: "/images/home/print.jpg",
-      alt: "Printed marketing materials on a desk",
+      src: "/images/home/print-mailers.jpg",
+      alt: "Direct mail postcards stacked and ready to send",
     },
     work: [
       {
-        src: "/images/home/print.jpg",
-        alt: "Print collateral",
+        src: "/images/home/print-mailers.jpg",
+        alt: "Direct mail postcards",
         caption: "Cards & collateral",
       },
       {
-        src: "/images/home/when-you-need.jpg",
-        alt: "Print production",
+        src: "/images/home/work-print-press.jpg",
+        alt: "Print production and large-format press",
         caption: "Press & production",
       },
       {
-        src: "/images/home/what-you-need.jpg",
-        alt: "Campaign materials",
+        src: "/images/home/work-print-collateral.jpg",
+        alt: "Printed business cards and campaign materials",
         caption: "Campaign kits",
       },
       {
-        src: "/images/home/team.jpg",
-        alt: "Reviewing print materials",
+        src: "/images/home/work-team-apparel.jpg",
+        alt: "Reviewing branded materials with the team",
         caption: "Proof & review",
       },
     ],
@@ -199,28 +200,28 @@ export const services: Service[] = [
       "Executive and VIP moments",
     ],
     heroImage: {
-      src: "/images/home/gifts.jpg",
-      alt: "Curated custom gift packaging",
+      src: "/images/home/work-welcome-kit.jpg",
+      alt: "Custom welcome kit with branded apparel and gifts",
     },
     work: [
       {
-        src: "/images/home/gifts.jpg",
-        alt: "Gift packaging",
+        src: "/images/home/work-welcome-kit.jpg",
+        alt: "Branded welcome kit in a gift box",
         caption: "Welcome kits",
       },
       {
-        src: "/images/home/drinkware.jpg",
-        alt: "Gift drinkware",
+        src: "/images/home/work-branded-drinkware.jpg",
+        alt: "Branded tumblers and drinkware",
         caption: "Kit essentials",
       },
       {
-        src: "/images/home/tote.jpg",
-        alt: "Gift tote",
+        src: "/images/home/work-totes.jpg",
+        alt: "Custom printed tote bags",
         caption: "Packaged totes",
       },
       {
-        src: "/images/home/apparel.jpg",
-        alt: "Gift apparel",
+        src: "/images/home/work-embroidered-polo.jpg",
+        alt: "Soft goods for gifting",
         caption: "Soft goods gifts",
       },
     ],
@@ -250,28 +251,28 @@ export const services: Service[] = [
       "Sponsor and booth packages",
     ],
     heroImage: {
-      src: "/images/home/tote.jpg",
-      alt: "Event tote bag ready for decoration",
+      src: "/images/home/events-trade-show.jpg",
+      alt: "Trade show floor with branded booths and attendees",
     },
     work: [
       {
-        src: "/images/home/tote.jpg",
-        alt: "Event totes",
-        caption: "Booth giveaways",
+        src: "/images/home/events-trade-show.jpg",
+        alt: "Trade show booths and attendees",
+        caption: "Trade shows",
       },
       {
-        src: "/images/home/gifts.jpg",
+        src: "/images/home/work-event-kit.jpg",
         alt: "Attendee kits",
         caption: "Attendee kits",
       },
       {
-        src: "/images/home/drinkware.jpg",
+        src: "/images/home/work-branded-drinkware.jpg",
         alt: "Event drinkware",
         caption: "High-use swag",
       },
       {
-        src: "/images/home/hero-team.jpg",
-        alt: "Team preparing for an event",
+        src: "/images/home/work-team-apparel.jpg",
+        alt: "Team ready for an event",
         caption: "Show readiness",
       },
     ],
@@ -301,27 +302,27 @@ export const services: Service[] = [
       "Ongoing inventory replenishment",
     ],
     heroImage: {
-      src: "/images/home/what-you-need.jpg",
-      alt: "Team reviewing custom program options",
+      src: "/images/home/company-store.jpg",
+      alt: "Custom company store catalog with branded apparel",
     },
     work: [
       {
-        src: "/images/home/apparel.jpg",
-        alt: "Store apparel assortment",
+        src: "/images/home/company-store.jpg",
+        alt: "Company storefront catalog",
         caption: "Catalog apparel",
       },
       {
-        src: "/images/home/hoodie.jpg",
+        src: "/images/home/work-embroidered-hoodie.jpg",
         alt: "Program outerwear",
         caption: "Seasonal drops",
       },
       {
-        src: "/images/home/caps.jpg",
+        src: "/images/home/work-embroidered-caps.jpg",
         alt: "Store headwear",
         caption: "Headwear options",
       },
       {
-        src: "/images/home/team.jpg",
+        src: "/images/home/work-team-apparel.jpg",
         alt: "Team collaborating on a program",
         caption: "Program support",
       },

@@ -7,12 +7,13 @@ import { processDetails, processSteps } from "@/data/site";
 import { ProcessHero } from "@/components/process/ProcessHero";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { PageEnter } from "@/components/ui/PageEnter";
 import { CTA } from "@/components/home/CTA";
 import { AppIcon } from "@/lib/icons";
 
 export function ProcessPageContent() {
   return (
-    <>
+    <PageEnter>
       <ProcessHero />
 
       <section className="py-16 md:py-24">
@@ -36,7 +37,7 @@ export function ProcessPageContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.35, delay: index * 0.05 }}
-                className="group flex h-full flex-col rounded-2xl border border-border bg-white p-5 transition-colors hover:border-brand-accent/40 hover:bg-brand-accent-light/30 md:p-6"
+                className="flex h-full flex-col rounded-2xl border border-border bg-white p-5 md:p-6"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
@@ -45,7 +46,7 @@ export function ProcessPageContent() {
                   <AppIcon
                     name={step.icon}
                     size={18}
-                    className="text-taupe/50 transition-colors group-hover:text-brand-accent-dark"
+                    className="text-taupe/50"
                   />
                 </div>
                 <h3 className="mt-5 text-base font-semibold tracking-tight text-taupe md:text-lg">
@@ -77,24 +78,27 @@ export function ProcessPageContent() {
             {processSteps.map((step, index) => (
               <motion.article
                 key={step.step}
+                id={step.id}
                 initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4 }}
-                className="grid gap-6 py-10 first:pt-8 last:pb-0 md:py-12 lg:grid-cols-12 lg:gap-12"
+                className="grid scroll-mt-24 gap-6 py-10 first:pt-8 last:pb-0 md:py-12 lg:grid-cols-12 lg:gap-12"
               >
                 <div className="lg:col-span-4">
                   <span className="text-xs font-semibold tabular-nums tracking-wide text-brand-accent-dark">
                     {step.step}
                   </span>
-                  <h3 className="mt-3 text-xl font-bold tracking-tight text-taupe md:text-2xl">
-                    {step.title}
-                  </h3>
-                  <AppIcon
-                    name={step.icon}
-                    size={22}
-                    className="mt-5 text-brand-accent-dark"
-                  />
+                  <div className="mt-3 flex items-center gap-3">
+                    <AppIcon
+                      name={step.icon}
+                      size={22}
+                      className="shrink-0 text-brand-accent-dark"
+                    />
+                    <h3 className="text-xl font-bold tracking-tight text-taupe md:text-2xl">
+                      {step.title}
+                    </h3>
+                  </div>
                 </div>
                 <div className="lg:col-span-8">
                   <p className="text-sm leading-relaxed text-grey-olive md:text-base">
@@ -176,9 +180,10 @@ export function ProcessPageContent() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/home/what-you-need.jpg"
+            src="/images/home/work-team-apparel.jpg"
             alt="Reviewing custom product options"
             fill
+            quality={90}
             sizes="100vw"
             className="object-cover"
           />
@@ -212,6 +217,6 @@ export function ProcessPageContent() {
       </section>
 
       <CTA />
-    </>
+    </PageEnter>
   );
 }

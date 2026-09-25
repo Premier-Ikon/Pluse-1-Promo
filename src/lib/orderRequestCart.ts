@@ -23,6 +23,7 @@ export type OrderRequestCartItem = {
   design: {
     hasArtwork: boolean;
     notes?: string;
+    artworkUrl?: string;
   };
 };
 

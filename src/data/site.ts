@@ -153,12 +153,14 @@ export const heroFeatures: {
 
 export const processSteps: {
   step: string;
+  id: string;
   title: string;
   description: string;
   icon: IconName;
 }[] = [
   {
     step: "01",
+    id: "connect",
     title: "Connect",
     icon: "message",
     description:
@@ -166,6 +168,7 @@ export const processSteps: {
   },
   {
     step: "02",
+    id: "design-quote",
     title: "Design & Quote",
     icon: "palette",
     description:
@@ -173,6 +176,7 @@ export const processSteps: {
   },
   {
     step: "03",
+    id: "produce",
     title: "Produce",
     icon: "package",
     description:
@@ -180,6 +184,7 @@ export const processSteps: {
   },
   {
     step: "04",
+    id: "deliver",
     title: "Deliver",
     icon: "truck",
     description:

@@ -153,3 +153,79 @@ body {
 .animate-marquee {
   animation: marquee 35s linear infinite;
 }
+
+.animate-marquee-photos {
+  animation: marquee 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-photos {
+    animation: none;
+  }
+}
+
+@keyframes page-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-loader-ring {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, var(--brand-accent) 25%, transparent);
+  border-top-color: var(--brand-accent-dark);
+  animation: page-loader-spin 0.75s linear infinite;
+}
+
+@keyframes page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content-enter {
+  animation: page-fade-in 0.45s ease-out forwards;
+}
+
+.page-loader-exit {
+  animation: page-fade-out 0.35s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes added-modal-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes added-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

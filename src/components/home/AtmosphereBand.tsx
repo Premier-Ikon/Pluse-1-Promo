@@ -15,6 +15,7 @@ export function AtmosphereBand() {
           src={homeVisuals.atmosphere.src}
           alt={homeVisuals.atmosphere.alt}
           fill
+          quality={90}
           sizes="100vw"
           className="object-cover"
         />

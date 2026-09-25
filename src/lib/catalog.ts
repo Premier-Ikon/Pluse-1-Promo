@@ -70,6 +70,17 @@ export type OrderRequestPayload = {
     needByDate?: string;
     notes?: string;
   };
+  shipping?: {
+    id?: string;
+    label?: string;
+    line1: string;
+    line2?: string | null;
+    city: string;
+    state: string;
+    postalCode: string;
+    country?: string;
+    formatted?: string | null;
+  } | null;
   color?: {
     name: string;
     hex?: string;

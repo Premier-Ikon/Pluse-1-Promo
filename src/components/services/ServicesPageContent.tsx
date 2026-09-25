@@ -15,6 +15,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { CTA } from "@/components/home/CTA";
 import { AppIcon } from "@/lib/icons";
+import { cn } from "@/lib/utils";
 
 export function ServicesPageContent() {
   return (
@@ -84,6 +85,7 @@ export function ServicesPageContent() {
             alt={homeVisuals.atmosphere.alt}
             fill
             sizes="100vw"
+            quality={90}
             className="object-cover"
           />
           <div className="absolute inset-0 bg-taupe/75" />
@@ -136,17 +138,27 @@ export function ServicesPageContent() {
                     }
                   >
                     <div
-                      className={
-                        imageLeft
-                          ? "relative h-52 w-full max-w-md overflow-hidden rounded-2xl sm:h-56 md:h-64 lg:max-w-lg"
-                          : "relative ml-auto h-52 w-full max-w-md overflow-hidden rounded-2xl sm:h-56 md:h-64 lg:max-w-lg"
-                      }
-                    >                      <Image
+                      className={cn(
+                        "relative w-full overflow-hidden rounded-2xl",
+                        imageLeft ? "" : "ml-auto",
+                        service.id === "embroidery"
+                          ? "aspect-[3/4] max-w-xs sm:max-w-sm"
+                          : service.id === "stores"
+                            ? "aspect-[16/11] max-w-md lg:max-w-lg"
+                            : "h-52 max-w-md sm:h-56 md:h-64 lg:max-w-lg",
+                      )}
+                    >
+                      <Image
                         src={service.heroImage.src}
                         alt={service.heroImage.alt}
                         fill
-                        sizes="(max-width: 1024px) 100vw, 28rem"
-                        className="object-cover"
+                        sizes="(max-width: 1024px) 92vw, 512px"
+                        quality={100}
+                        className={
+                          service.id === "stores"
+                            ? "object-cover object-top"
+                            : "object-cover"
+                        }
                       />
                     </div>
                   </div>

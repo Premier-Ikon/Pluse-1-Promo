@@ -1,8 +1,9 @@
 "use client";
 
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { ArrowRight, Mail, Package, Phone, MapPin, Clock } from "lucide-react";
 import { siteConfig } from "@/data/site";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
 const contactInfo = [
@@ -44,7 +45,33 @@ export function ContactPageContent() {
     <section className="relative overflow-hidden bg-surface">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
       <div className="bg-hero-glow pointer-events-none absolute inset-0 opacity-80" />
-      <Container className="relative py-16 md:py-24">
+      <Container className="relative pt-10 pb-16 md:pt-14 md:pb-24">
+        <div className="mb-8 flex flex-col gap-4 rounded-2xl border border-brand-accent/30 bg-brand-accent-light/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6 md:mb-10">
+          <div className="flex items-start gap-3 sm:items-center">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-brand-accent-dark shadow-sm">
+              <Package size={18} strokeWidth={1.75} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-taupe">
+                Know what you want?
+              </p>
+              <p className="mt-0.5 text-sm leading-relaxed text-grey-olive">
+                Start an order request from our products — or contact our team
+                below if you&apos;d rather talk it through.
+              </p>
+            </div>
+          </div>
+          <Button
+            href="/apparel"
+            variant="primary"
+            size="sm"
+            className="w-full shrink-0 sm:w-auto"
+          >
+            Start an order request
+            <ArrowRight size={16} />
+          </Button>
+        </div>
+
         <div className="max-w-2xl">
           <p className="text-eyebrow text-brand-accent-dark">Contact</p>
           <h1 className="mt-3 text-section-title text-taupe">
