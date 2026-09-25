@@ -170,36 +170,38 @@ export function pastOrderToCartItems(
           ]
         : [];
 
-  return sourceItems
-    .map((item) => {
-      const productId = String(item.productId || "").trim();
-      if (!productId) return null;
-      const variants = normalizeVariants(item);
-      if (!variants.length) return null;
-      return {
-        productId,
-        productSlug: item.productSlug || productId,
-        productName: item.productName || "Product",
-        brand: item.brand,
-        imageUrl: item.imageUrl,
-        basePrice: item.basePrice,
-        currency: item.currency,
-        variants,
-        decoration: {
-          method: item.decoration?.method || "other",
-          locations: item.decoration?.locations || [],
-          colors: item.decoration?.colors ?? 0,
-        },
-        design: {
-          hasArtwork: Boolean(
-            item.design?.hasArtwork || item.design?.artworkUrl,
-          ),
-          notes: item.design?.notes,
-          artworkUrl: item.design?.artworkUrl,
-        },
-      } satisfies Omit<OrderRequestCartItem, "id">;
-    })
-    .filter((item): item is Omit<OrderRequestCartItem, "id"> => Boolean(item));
+  const cartItems: Omit<OrderRequestCartItem, "id">[] = [];
+
+  for (const item of sourceItems) {
+    const productId = String(item.productId || "").trim();
+    if (!productId) continue;
+    const variants = normalizeVariants(item);
+    if (!variants.length) continue;
+    cartItems.push({
+      productId,
+      productSlug: item.productSlug || productId,
+      productName: item.productName || "Product",
+      brand: item.brand,
+      imageUrl: item.imageUrl,
+      basePrice: item.basePrice,
+      currency: item.currency,
+      variants,
+      decoration: {
+        method: item.decoration?.method || "other",
+        locations: item.decoration?.locations || [],
+        colors: item.decoration?.colors ?? 0,
+      },
+      design: {
+        hasArtwork: Boolean(
+          item.design?.hasArtwork || item.design?.artworkUrl,
+        ),
+        notes: item.design?.notes,
+        artworkUrl: item.design?.artworkUrl,
+      },
+    });
+  }
+
+  return cartItems;
 }
 
 export function pastOrderToCartWithIds(
