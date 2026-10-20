@@ -25,7 +25,7 @@ export function Hero() {
       {/* Full-bleed photo — tall frame so more of the shot shows */}
       <div className="relative min-h-[88vh] w-full sm:min-h-[86vh] lg:min-h-[820px] xl:min-h-[880px]">
         <Image
-          src="/images/home/hero-team.jpg?v=5"
+          src="/images/home/hero-team.jpg?v=6"
           alt="A team reviewing custom apparel, drinkware, and gifts together in a bright studio"
           fill
           priority
